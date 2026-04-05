@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes Catalog - AceNotes</title>
+<link rel="icon" type="image/png" href="../assets/avatars/LOGO.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('acenotes-theme');}catch(e){}if(!t){var m=document.cookie.match(/acenotes-theme=(dark|light)/);if(m)t=m[1];}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/buy-notes.css">
+</head>
+<body>
+
+<div id="navbar-mount"></div>
+
+<section class="catalog-wrap">
+  <div class="container">
+    <div class="section-header">
+      <h2>Notes Catalog</h2>
+      <p>Chapter-wise notes for Classes 6–12. Select your class to get started.</p>
+    </div>
+
+    <div class="selectors">
+      <div class="class-selector" style="margin-top:0;">
+        <label for="class-select">Class:</label>
+        <select id="class-select" class="class-dropdown">
+          <option value="">-- Select Class --</option>
+          <option value="6">Class 6</option>
+          <option value="7">Class 7</option>
+          <option value="8">Class 8</option>
+          <option value="9">Class 9</option>
+          <option value="10">Class 10</option>
+          <option value="11">Class 11 – JEE</option>
+          <option value="12">Class 12 – JEE</option>
+        </select>
+      </div>
+      <div class="board-selector" id="board-selector" style="display:none;margin-top:0;">
+        <label for="board-select">Board:</label>
+        <select id="board-select" class="board-dropdown">
+          <option value="">-- Select Board --</option>
+          <option value="CBSE">CBSE</option>
+          <option value="ICSE">ICSE</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="class-placeholder visible" id="placeholder" style="min-height:300px;margin-top:40px;">
+      <div class="placeholder-content">
+        <div class="placeholder-icon">📚</div>
+        <h3>Select Your Class</h3>
+        <p>Choose a class from the dropdown above to browse available notes.</p>
+      </div>
+    </div>
+
+    <div class="subjects-area" id="subjects-area" style="display:none;"></div>
+  </div>
+</section>
+
+<script src="../assets/acenotes.js"></script>
+<script>
+renderNavbar({ base: '../', cur: 'catalog' });
+
+const SUBJECTS_6_10 = ['English Language','English Literature','Physics','Chemistry','Mathematics','Biology','Computer','History','Geography'];
+const SUBJECTS_JEE  = ['Physics','Chemistry','Mathematics'];
+
+const classSelect  = document.getElementById('class-select');
+const boardSelect  = document.getElementById('board-select');
+const boardWrapper = document.getElementById('board-selector');
+const placeholder  = document.getElementById('placeholder');
+const subjectsArea = document.getElementById('subjects-area');
+
+function noteCard(note) {
+  return `<div class="chapter-card visible" onclick="window.location.href='note-details.html?id=${note.id}'" style="cursor:pointer;">
+    <div class="chapter-card-accent"></div>
+    <div class="chapter-card-body">
+      <h4>${note.title}</h4>
+      <div class="chapter-card-footer">
+        <div class="chapter-price">₹${note.price}</div>
+        <button class="btn chapter-btn add-to-cart-btn"
+          onclick="event.stopPropagation();window.location.href='note-details.html?id=${note.id}'">
+          View Details
+        </button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderNotes(cls, board) {
+  const isJee    = cls === '11' || cls === '12';
+  const boardKey = isJee ? 'JEE' : board;
+  const subjects = isJee ? SUBJECTS_JEE : SUBJECTS_6_10;
+  const label    = isJee ? `Class ${cls} – JEE` : `Class ${cls} – ${board}`;
+
+  let html = `<div class="selection-banner"><span>${label}</span></div>`;
+  subjects.forEach(subject => {
+    const notes = CATALOG[cls]?.[boardKey]?.[subject] ?? [];
+    html += `<div class="subject-block"><h3>${subject}</h3>`;
+    if (notes.length) {
+      html += `<div class="chapters-grid">${notes.map(noteCard).join('')}</div>`;
+    } else {
+      html += `<div class="coming-soon-card"><span>🚧</span>Notes for <strong>${subject}</strong> are being prepared. Check back soon!</div>`;
+    }
+    html += `</div>`;
+  });
+
+  subjectsArea.innerHTML = html;
+  subjectsArea.style.display = 'block';
+  placeholder.style.display  = 'none';
+}
+
+classSelect.addEventListener('change', function() {
+  const cls = this.value;
+  boardSelect.value = '';
+  subjectsArea.style.display = 'none';
+  placeholder.style.display  = 'flex';
+  if (!cls) { boardWrapper.style.display = 'none'; return; }
+  const isJee = cls === '11' || cls === '12';
+  if (isJee) { boardWrapper.style.display = 'none'; renderNotes(cls, null); }
+  else { boardWrapper.style.display = 'flex'; }
+});
+
+boardSelect.addEventListener('change', function() {
+  const cls = classSelect.value, board = this.value;
+  if (cls && board) renderNotes(cls, board);
+});
+</script>
+</body>
+</html>

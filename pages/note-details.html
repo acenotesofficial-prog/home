@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note Details - AceNotes</title>
+<link rel="icon" type="image/png" href="../assets/avatars/LOGO.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('acenotes-theme');}catch(e){}if(!t){var m=document.cookie.match(/acenotes-theme=(dark|light)/);if(m)t=m[1];}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/note-details.css">
+</head>
+<body>
+
+<div id="navbar-mount"></div>
+
+<section class="nd-page">
+<div class="container">
+  <nav class="nd-breadcrumb">
+    <a href="buy-notes.html">Notes Catalog</a>
+    <span>›</span>
+    <span id="bc-subject"></span>
+    <span>›</span>
+    <span id="bc-title"></span>
+  </nav>
+
+  <div class="nd-layout">
+    <div class="nd-left">
+      <div class="nd-subject-tag" id="nd-subject-tag"></div>
+      <h1 class="nd-title" id="nd-title"></h1>
+      <div class="nd-meta-row" id="nd-meta-row"></div>
+      <div class="nd-section">
+        <div class="nd-section-title">About These Notes</div>
+        <p class="nd-description" id="nd-description"></p>
+      </div>
+      <div class="nd-section">
+        <div class="nd-section-title">What's Included</div>
+        <ul class="nd-features" id="nd-features"></ul>
+      </div>
+      <div class="nd-section">
+        <div class="nd-section-title">Specifications</div>
+        <div class="nd-specs-grid" id="nd-specs"></div>
+      </div>
+    </div>
+
+    <div class="nd-right">
+    <div class="nd-sticky">
+    <div class="nd-card">
+      <div class="nd-img-wrap" id="nd-img-wrap"></div>
+      <div class="nd-card-body">
+        <div class="nd-price-row">
+          <span class="nd-price" id="nd-price"></span>
+          <span class="nd-price-label">one-time</span>
+        </div>
+        <div class="nd-actions">
+          <a id="nd-whatsapp-btn" href="#" target="_blank" class="nd-btn-cart">🛒 Order via WhatsApp</a>
+          <a href="buy-notes.html" class="nd-btn-back">← Back to Catalog</a>
+        </div>
+        <div class="nd-card-divider"></div>
+        <div class="nd-trust-row">
+          <div class="nd-trust-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
+            Secure digital delivery
+          </div>
+          <div class="nd-trust-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg>
+            Instant access after approval
+          </div>
+          <div class="nd-trust-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            Lifetime access once purchased
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<script src="../assets/acenotes.js"></script>
+<script>
+renderNavbar({ base: '../', cur: 'catalog' });
+
+const params = new URLSearchParams(location.search);
+const id = parseInt(params.get('id'));
+const note = NOTES.find(n => n.id === id);
+
+if (!note) {
+  location.href = 'buy-notes.html';
+} else {
+  // Page title
+  document.title = note.title + ' – AceNotes';
+
+  // Breadcrumb
+  document.getElementById('bc-subject').textContent = note.subject;
+  document.getElementById('bc-title').textContent   = note.title;
+
+  // Subject tag
+  document.getElementById('nd-subject-tag').innerHTML = '📚 ' + note.subject;
+
+  // Title
+  document.getElementById('nd-title').textContent = note.title;
+
+  // Meta pills
+  const boardLabel = note.board || 'JEE';
+  const classLabel = 'Class ' + note.cls + ((!note.board) ? ' – JEE' : ' – ' + note.board);
+  document.getElementById('nd-meta-row').innerHTML = `
+    <div class="nd-meta-pill">🎓 <strong>${classLabel}</strong></div>
+    <div class="nd-meta-pill">📋 <strong>${boardLabel}</strong></div>
+    <div class="nd-meta-pill">📄 <strong>Digital PDF</strong></div>`;
+
+  // Description
+  document.getElementById('nd-description').innerHTML = note.description;
+
+  // Features
+  document.getElementById('nd-features').innerHTML = note.features.map(f => `<li>${f}</li>`).join('');
+
+  // Specs
+  const specs = [
+    { label: 'Class',   value: 'Class ' + note.cls },
+    { label: 'Board',   value: boardLabel },
+    { label: 'Subject', value: note.subject },
+    { label: 'Format',  value: 'Digital PDF' },
+    { label: 'Access',  value: 'Instant after approval' },
+    { label: 'Price',   value: '₹' + note.price.toFixed(2) },
+  ];
+  document.getElementById('nd-specs').innerHTML = specs.map(s =>
+    `<div class="nd-spec-item"><div class="nd-spec-label">${s.label}</div><div class="nd-spec-value">${s.value}</div></div>`
+  ).join('');
+
+  // Price
+  document.getElementById('nd-price').textContent = '₹' + note.price.toFixed(2);
+
+  // Cover image
+  const imgWrap = document.getElementById('nd-img-wrap');
+  if (note.cover) {
+    imgWrap.innerHTML = `<img id="nd-cover-img" data-light="${note.cover.light}" data-dark="${note.cover.dark}" alt="${note.title}">`;
+    const img = document.getElementById('nd-cover-img');
+    const setImg = () => img.src = document.documentElement.getAttribute('data-theme') === 'dark' ? img.dataset.dark : img.dataset.light;
+    setImg();
+    new MutationObserver(setImg).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+  } else {
+    imgWrap.innerHTML = `<div class="nd-img-placeholder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.966 8.966 0 00-6 2.292m0-14.25v14.25"/></svg><span>${note.subject} Notes</span></div>`;
+  }
+
+  // WhatsApp order button
+  const msg = `Hello, I would like to order:\n\n${note.title}\nPrice: ₹${note.price}\n\nPlease confirm and provide payment details.`;
+  document.getElementById('nd-whatsapp-btn').href = 'https://wa.me/919163164555?text=' + encodeURIComponent(msg);
+}
+</script>
+</body>
+</html>

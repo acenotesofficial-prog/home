@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AceNotes Cover Generator</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 40px;
+            background: #1a1a2e;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        
+        .instruction {
+            background: #4e6ef2;
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+        
+        .covers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 30px;
+            max-width: 1400px;
+        }
+        
+        .cover-item {
+            background: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        
+        .cover-item img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .cover-label {
+            padding: 15px;
+            background: #f3f4f6;
+            text-align: center;
+            font-weight: 700;
+            color: #1e293b;
+        }
+    </style>
+</head>
+<body>
+    <div class="instruction">
+        <h2>📸 AceNotes Cover Preview</h2>
+        <p><strong>Instructions:</strong></p>
+        <ol>
+            <li>Open this file in your browser</li>
+            <li>You'll see all cover images displayed</li>
+            <li>Right-click on any cover → "Save image as..." to download</li>
+            <li>Or use a screenshot tool to capture individual covers</li>
+        </ol>
+        <p style="margin-top: 15px;"><em>All covers are in the same folder as this HTML file.</em></p>
+    </div>
+    
+    <div class="covers-grid">
+        <!-- Physics Covers -->
+        <div class="cover-item">
+            <img src="cover-03-center-of-mass.png" alt="Center of Mass - Dark">
+            <div class="cover-label">Center of Mass (Dark)</div>
+        </div>
+        <div class="cover-item">
+            <img src="cover-03-center-of-mass-light.png" alt="Center of Mass - Light">
+            <div class="cover-label">Center of Mass (Light)</div>
+        </div>
+        
+        <!-- Chemistry Covers -->
+        <div class="cover-item">
+            <img src="cover-02-sbcc.png" alt="Basic Concepts of Chemistry - Dark">
+            <div class="cover-label">Basic Concepts of Chemistry (Dark)</div>
+        </div>
+        <div class="cover-item">
+            <img src="cover-02-sbcc-light.png" alt="Basic Concepts of Chemistry - Light">
+            <div class="cover-label">Basic Concepts of Chemistry (Light)</div>
+        </div>
+        
+        <!-- Mathematics Covers -->
+        <div class="cover-item">
+            <img src="cover-09-trigonometry.png" alt="Trigonometric Functions - Dark">
+            <div class="cover-label">Trigonometric Functions (Dark)</div>
+        </div>
+        <div class="cover-item">
+            <img src="cover-09-trigonometry-light.png" alt="Trigonometric Functions - Light">
+            <div class="cover-label">Trigonometric Functions (Light)</div>
+        </div>
+        
+        <!-- English Covers -->
+        <div class="cover-item">
+            <img src="cover-01-english.png" alt="English Language - Dark">
+            <div class="cover-label">English Language (Dark)</div>
+        </div>
+        <div class="cover-item">
+            <img src="cover-01-english-light.png" alt="English Language - Light">
+            <div class="cover-label">English Language (Light)</div>
+        </div>
+    </div>
+    
+    <script>
+        // Auto-reload images when they change (useful when taking new screenshots)
+        setInterval(() => {
+            document.querySelectorAll('img').forEach(img => {
+                const src = img.src;
+                img.src = '';
+                img.src = src + '?t=' + Date.now();
+            });
+        }, 2000);
+    </script>
+</body>
+</html>

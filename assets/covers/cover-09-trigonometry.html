@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cover Template - Trigonometric Functions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #1a1a2e;
+        }
+
+        .cover-container {
+            width: 800px;
+            height: 600px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2d1e50 0%, #1a1433 100%);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Decorative wave pattern (trigonometry theme) */
+        .wave {
+            position: absolute;
+            width: 100%;
+            height: 200px;
+            background: transparent;
+            z-index: 5;
+            opacity: 0.1;
+        }
+
+        .wave-1 {
+            top: 100px;
+            left: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 50px,
+                rgba(167, 139, 252, 0.3) 50px,
+                rgba(167, 139, 252, 0.3) 51px
+            );
+            transform: skewY(-15deg);
+        }
+
+        .wave-2 {
+            bottom: 150px;
+            right: 0;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 40px,
+                rgba(167, 139, 252, 0.2) 40px,
+                rgba(167, 139, 252, 0.2) 41px
+            );
+            transform: skewY(15deg);
+        }
+
+        /* Decorative circles */
+        .circle-1 {
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            background: linear-gradient(135deg, #a78bfc, #8b5cf6);
+            border-radius: 50%;
+            top: -60px;
+            right: -60px;
+            opacity: 0.25;
+        }
+
+        .circle-2 {
+            position: absolute;
+            width: 160px;
+            height: 160px;
+            background: linear-gradient(135deg, #a78bfc, #c4b5fd);
+            border-radius: 50%;
+            bottom: -40px;
+            left: -40px;
+            opacity: 0.2;
+        }
+
+        /* Center Logo Watermark */
+        .logo-watermark {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 350px;
+            height: 350px;
+            object-fit: contain;
+            opacity: 0.08;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Math symbols */
+        .math-symbol {
+            position: absolute;
+            font-size: 120px;
+            font-weight: 300;
+            color: rgba(167, 139, 252, 0.08);
+            font-family: 'Times New Roman', serif;
+            z-index: 3;
+        }
+
+        .symbol-1 {
+            top: 80px;
+            left: 40px;
+        }
+
+        .symbol-2 {
+            bottom: 120px;
+            right: 60px;
+            font-size: 100px;
+        }
+
+        /* Content wrapper */
+        .content {
+            position: relative;
+            z-index: 10;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 40px 60px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .brand-logo {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+        }
+
+        /* Main content */
+        .main {
+            text-align: center;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .subject-badge {
+            display: inline-block;
+            font-size: 48px;
+            font-weight: 900;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 20px rgba(167, 139, 252, 0.5);
+        }
+
+        .divider {
+            width: 150px;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, #a78bfc, transparent);
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        .chapter-title {
+            font-size: 44px;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.3;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 2px solid rgba(167, 139, 252, 0.3);
+        }
+
+        .class-info {
+            font-size: 24px;
+            font-weight: 700;
+            color: #a78bfc;
+            letter-spacing: 1px;
+        }
+
+        .jee-badge {
+            display: inline-block;
+            margin-left: 10px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1433;
+            background: #a78bfc;
+            padding: 4px 16px;
+            border-radius: 12px;
+        }
+
+        /* Bottom gradient overlay */
+        .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 150px;
+            background: linear-gradient(to top, rgba(26, 20, 51, 0.8), transparent);
+            z-index: 5;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="cover-container">
+        <!-- Center Logo Watermark -->
+        <img src="../../assets/avatars/LOGO.png" alt="" class="logo-watermark">
+        
+        <!-- Decorative elements -->
+        <div class="circle-1"></div>
+        <div class="circle-2"></div>
+        <div class="wave wave-1"></div>
+        <div class="wave wave-2"></div>
+        <div class="math-symbol symbol-1">∫</div>
+        <div class="math-symbol symbol-2">θ</div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Header -->
+            
+            <!-- Main content -->
+            <div class="main">
+                <div class="subject-badge">Mathematics</div>
+                <div class="divider"></div>
+                <div class="chapter-title">Trigonometric<br>Functions</div>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <div class="class-info">
+                    Class 11 <span class="jee-badge">JEE</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Gradient overlay -->
+        <div class="overlay"></div>
+    </div>
+</body>
+</html>
