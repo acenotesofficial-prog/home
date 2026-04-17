@@ -1,0 +1,24 @@
+/* ── my-notes.css ── */
+.my-notes-page{min-height:100vh;background:var(--bg);padding:50px 0 80px;}
+.my-notes-page h2{font-size:28px;font-weight:800;color:var(--text);margin-bottom:6px;}
+.my-notes-page .sub{font-size:15px;color:var(--text-muted);margin-bottom:36px;}
+.order-card{background:var(--bg-card);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:20px;}
+.order-card-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;background:var(--bg-card);border-bottom:1px solid var(--border);flex-wrap:wrap;gap:10px;}
+.order-id{font-size:14px;font-weight:700;color:var(--text);}
+.order-date{font-size:13px;color:var(--text-faint);}
+.order-total{font-size:16px;font-weight:800;color:var(--accent);}
+.badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-block;}
+.badge-pending{background:#fef3c7;color:#d97706;}
+.badge-approved{background:#dcfce7;color:#16a34a;}
+.badge-rejected{background:#fee2e2;color:#dc2626;}
+.order-item-row{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;border-bottom:1px solid var(--border-soft);gap:16px;}
+.order-item-row:last-child{border-bottom:none;}
+.order-item-name{font-size:14px;font-weight:600;color:var(--text);}
+.order-item-price{font-size:14px;color:var(--text-muted);flex-shrink:0;}
+.download-btn{background:linear-gradient(135deg,#4e6ef2,#5c7cfa);color:#fff;padding:7px 16px;border-radius:7px;font-size:13px;font-weight:700;text-decoration:none;transition:transform .2s,box-shadow .2s;flex-shrink:0;}
+.download-btn:hover{transform:translateY(-1px);box-shadow:0 4px 12px rgba(78,110,242,.3);}
+.pending-note{font-size:13px;color:#d97706;font-style:italic;}
+.empty-state{text-align:center;padding:80px 20px;}
+.empty-state span{font-size:64px;display:block;margin-bottom:16px;}
+.empty-state p{font-size:16px;color:var(--text-muted);margin-bottom:20px;}
+

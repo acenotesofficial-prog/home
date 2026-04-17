@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Notes Catalog - AceNotes</title>
+<link rel="icon" type="image/png" href="../assets/avatars/LOGO.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('acenotes-theme');}catch(e){}if(!t){var m=document.cookie.match(/acenotes-theme=(dark|light)/);if(m)t=m[1];}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/buy-notes.css">
+</head>
+<body>
+
+<div id="navbar-mount"></div>
+
+<div class="catalog-page">
+  <div class="container">
+
+    <!-- Page header -->
+    <div class="catalog-header">
+      <div class="catalog-header-left">
+        <h1 class="catalog-title">Notes Catalog</h1>
+        <p class="catalog-subtitle">Chapter-wise notes for Classes 6–12 · Board &amp; JEE</p>
+      </div>
+      <div class="catalog-header-right">
+        <span class="catalog-total-badge" id="catalog-total-badge">4 notes</span>
+      </div>
+    </div>
+
+    <!-- Class tabs -->
+    <div class="class-tabs-wrap">
+      <div class="class-tabs" id="class-tabs">
+        <button class="ctab" data-cls="6">6<span class="ctab-label">Foundation</span></button>
+        <button class="ctab" data-cls="7">7<span class="ctab-label">Foundation</span></button>
+        <button class="ctab" data-cls="8">8<span class="ctab-label">Foundation</span></button>
+        <button class="ctab" data-cls="9">9<span class="ctab-label">Board</span></button>
+        <button class="ctab" data-cls="10">10<span class="ctab-label">Board</span></button>
+        <button class="ctab ctab-jee" data-cls="11">11<span class="ctab-label">JEE</span></button>
+        <button class="ctab ctab-jee" data-cls="12">12<span class="ctab-label">JEE</span></button>
+      </div>
+    </div>
+
+    <!-- Board row -->
+    <div class="board-row" id="board-row" style="display:none;">
+      <button class="board-chip" data-board="CBSE">CBSE</button>
+      <button class="board-chip" data-board="ICSE">ICSE</button>
+    </div>
+
+    <!-- Subject chips -->
+    <div class="subject-row-wrap" id="subject-row-wrap" style="display:none;">
+      <div class="subject-row" id="subject-row"></div>
+    </div>
+
+    <!-- Content -->
+    <div id="catalog-content">
+
+      <div class="catalog-placeholder" id="placeholder">
+        <div class="placeholder-icon">📚</div>
+        <h3>Select a class above</h3>
+        <p>Your notes will appear here.</p>
+      </div>
+
+      <div id="sections-wrap" style="display:none;"></div>
+
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/acenotes.js"></script>
+<script>
+renderNavbar({ base: '../', cur: 'catalog' });
+
+const SUBJECTS_6_10 = ['English Language','English Literature','Physics','Chemistry','Mathematics','Biology','Computer','History','Geography'];
+const SUBJECTS_JEE  = ['Physics','Chemistry','Mathematics'];
+const SUBJECT_ICONS = {'Mathematics':'📐','Physics':'⚡','Chemistry':'🧪','English Language':'📝','English Literature':'📚','Biology':'🧬','Computer':'💻','History':'🏛️','Geography':'🌍'};
+
+let currentCls = null, currentBoard = null, activeSub = 'all';
+
+function isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
+
+function noteCard(note) {
+  const src = note.cover ? (isDark() ? note.cover.dark : note.cover.light) : null;
+  const cover = src
+    ? `<div class="nc-cover"><img data-light="${note.cover.light}" data-dark="${note.cover.dark}" src="${src}" alt="${note.title}"><div class="nc-overlay"><span>View Details</span></div></div>`
+    : `<div class="nc-cover nc-cover-empty"><span>${SUBJECT_ICONS[note.subject]||'📚'}</span><div class="nc-overlay"><span>View Details</span></div></div>`;
+  return `<div class="note-card visible" onclick="location.href='note-details.html?id=${note.id}'">
+    ${cover}
+    <div class="nc-body">
+      <div class="nc-tags"><span class="nc-tag">Class ${note.cls}</span><span class="nc-tag nc-tag-alt">${note.board||'JEE'}</span></div>
+      <p class="nc-title">${note.title}</p>
+      <div class="nc-footer">
+        <div><span class="nc-price">₹${note.price}</span><span class="nc-price-sub"> one-time</span></div>
+        <button class="nc-btn" onclick="event.stopPropagation();location.href='note-details.html?id=${note.id}'">Buy Now</button>
+      </div>
+    </div>
+  </div>`;
+}
+
+function renderSections() {
+  const isJee = currentCls === '11' || currentCls === '12';
+  const boardKey = isJee ? 'JEE' : currentBoard;
+  const subjects = isJee ? SUBJECTS_JEE : SUBJECTS_6_10;
+  const list = activeSub === 'all' ? subjects : [activeSub];
+
+  let html = '';
+  list.forEach(sub => {
+    const notes = CATALOG[currentCls]?.[boardKey]?.[sub] ?? [];
+    if (activeSub === 'all') {
+      html += `<div class="notes-section">
+        <div class="notes-section-hd">
+          <span class="nsh-icon">${SUBJECT_ICONS[sub]||'📚'}</span>
+          <span class="nsh-name">${sub}</span>
+          ${notes.length ? `<span class="nsh-badge">${notes.length}</span>` : ''}
+        </div>`;
+    } else {
+      html += `<div class="notes-section">`;
+    }
+    if (notes.length) {
+      html += `<div class="notes-grid">${notes.map(noteCard).join('')}</div>`;
+    } else {
+      html += `<div class="notes-coming-soon">🚧 <strong>${sub}</strong> notes are being prepared.</div>`;
+    }
+    html += `</div>`;
+  });
+
+  document.getElementById('sections-wrap').innerHTML = html;
+  document.getElementById('sections-wrap').style.display = 'block';
+  document.getElementById('placeholder').style.display = 'none';
+}
+
+function renderSubjectRow() {
+  const isJee = currentCls === '11' || currentCls === '12';
+  const boardKey = isJee ? 'JEE' : currentBoard;
+  const subjects = isJee ? SUBJECTS_JEE : SUBJECTS_6_10;
+  const total = subjects.reduce((s,sub) => s + (CATALOG[currentCls]?.[boardKey]?.[sub]?.length||0), 0);
+
+  let html = `<button class="sub-chip${activeSub==='all'?' active':''}" onclick="setSub('all')">All <span class="sub-chip-count">${total}</span></button>`;
+  subjects.forEach(sub => {
+    const c = CATALOG[currentCls]?.[boardKey]?.[sub]?.length||0;
+    html += `<button class="sub-chip${activeSub===sub?' active':''}" onclick="setSub('${sub}')">${SUBJECT_ICONS[sub]} ${sub}${c?` <span class="sub-chip-count">${c}</span>`:''}</button>`;
+  });
+  document.getElementById('subject-row').innerHTML = html;
+  document.getElementById('subject-row-wrap').style.display = 'block';
+}
+
+function setSub(sub) {
+  activeSub = sub;
+  renderSubjectRow();
+  renderSections();
+}
+
+function selectClass(cls) {
+  currentCls = cls; activeSub = 'all';
+  document.querySelectorAll('.ctab').forEach(b => b.classList.toggle('active', b.dataset.cls === cls));
+  const isJee = cls === '11' || cls === '12';
+  const boardRow = document.getElementById('board-row');
+  if (isJee) {
+    boardRow.style.display = 'none';
+    currentBoard = null;
+    renderSubjectRow();
+    renderSections();
+  } else {
+    boardRow.style.display = 'flex';
+    document.querySelectorAll('.board-chip').forEach(b => b.classList.remove('active'));
+    document.getElementById('subject-row-wrap').style.display = 'none';
+    document.getElementById('sections-wrap').style.display = 'none';
+    document.getElementById('placeholder').style.display = 'flex';
+    currentBoard = null;
+  }
+}
+
+document.querySelectorAll('.ctab').forEach(b => b.addEventListener('click', () => selectClass(b.dataset.cls)));
+
+document.querySelectorAll('.board-chip').forEach(b => b.addEventListener('click', function() {
+  document.querySelectorAll('.board-chip').forEach(x => x.classList.remove('active'));
+  this.classList.add('active');
+  currentBoard = this.dataset.board;
+  activeSub = 'all';
+  renderSubjectRow();
+  renderSections();
+}));
+
+new MutationObserver(() => {
+  document.querySelectorAll('.nc-cover img').forEach(img => {
+    img.src = isDark() ? img.dataset.dark : img.dataset.light;
+  });
+}).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+</script>
+</body>
+</html>
