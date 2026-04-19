@@ -61,6 +61,9 @@
 .nd-btn-cart { width: 100%; padding: 13px; font-size: 15px; font-weight: 700; border: none; border-radius: 10px; cursor: pointer; background: linear-gradient(135deg, #4e6ef2, #6366f1); color: #fff; transition: all .25s ease; text-decoration: none; display: block; text-align: center; }
 .nd-btn-cart:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(78,110,242,.35); }
 .nd-btn-cart:disabled { background: #e5e7eb; color: #9ca3af; cursor: default; transform: none; box-shadow: none; }
+.nd-btn-preview { width: 100%; padding: 11px; font-size: 14px; font-weight: 600; border: 1.5px solid var(--accent); border-radius: 10px; cursor: pointer; background: transparent; color: var(--accent); text-decoration: none; text-align: center; display: block; transition: all .2s; }
+.nd-btn-preview:hover { background: var(--accent-soft); }
+.nd-btn-preview-disabled { border-color: var(--border) !important; color: var(--text-faint) !important; cursor: default; pointer-events: none; }
 .nd-btn-back { width: 100%; padding: 11px; font-size: 14px; font-weight: 600; border: 1.5px solid var(--border); border-radius: 10px; cursor: pointer; background: var(--bg-card); color: var(--text-muted); text-decoration: none; text-align: center; display: block; transition: all .2s; }
 .nd-btn-back:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
 

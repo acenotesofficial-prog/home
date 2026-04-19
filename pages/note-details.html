@@ -53,6 +53,7 @@
         </div>
         <div class="nd-actions">
           <a id="nd-whatsapp-btn" href="#" target="_blank" class="nd-btn-cart">🛒 Order via WhatsApp</a>
+          <a id="nd-preview-btn" href="#" class="nd-btn-preview">👁 Download Preview</a>
           <a href="buy-notes.html" class="nd-btn-back">← Back to Catalog</a>
         </div>
         <div class="nd-card-divider"></div>
@@ -147,6 +148,17 @@ if (!note) {
   // WhatsApp order button
   const msg = `Hello, I would like to order:\n\n${note.title}\nPrice: ₹${note.price}\n\nPlease confirm and provide payment details.`;
   document.getElementById('nd-whatsapp-btn').href = 'https://wa.me/919163164555?text=' + encodeURIComponent(msg);
+
+  // Preview button
+  const previewBtn = document.getElementById('nd-preview-btn');
+  if (note.preview) {
+    previewBtn.href = note.preview;
+    previewBtn.target = '_blank';
+  } else {
+    previewBtn.removeAttribute('href');
+    previewBtn.classList.add('nd-btn-preview-disabled');
+    previewBtn.innerHTML = '⏳ Preview Coming Soon';
+  }
 }
 </script>
 </body>

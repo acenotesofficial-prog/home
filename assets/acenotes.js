@@ -9,6 +9,7 @@ const NOTES = [
   },
   { id: 2, title: 'Some Basic Concepts Of Chemistry', cls: '11', board: null, subject: 'Chemistry', price: 100,
     cover: { light: '../assets/covers/sbcc-light.png', dark: '../assets/covers/sbcc-dark.png' },
+    preview: 'https://drive.google.com/file/d/1DfwP-V7bD9w-D8NApD55_tKgzpHRPZBy/view?usp=drive_link',
     description: 'Foundation notes for <strong>Some Basic Concepts of Chemistry</strong> — mole concept, stoichiometry, concentration terms, and limiting reagent for JEE.',
     features: ['Complete mole concept with solved numerical examples','Stoichiometry and balancing equations explained clearly','All concentration terms: molarity, molality, normality, mole fraction','Limiting reagent and percentage yield problems','JEE-pattern MCQs and tips included','Quick-reference formula sheet at the end']
   },
@@ -19,11 +20,13 @@ const NOTES = [
   },
   { id: 9, title: 'Trigonometric Functions', cls: '11', board: null, subject: 'Mathematics', price: 120,
     cover: { light: '../assets/covers/trigo-light.png', dark: '../assets/covers/trigo-dark.png' },
+    preview: 'https://drive.google.com/file/d/13plJI-Tw_dgEO9d6--BcQhXXvDeVv9RR/view?usp=drive_link',
     description: 'Complete notes on <strong>Trigonometric Functions</strong> for JEE — identities, graphs, transformations, and inverse trig with exam-focused problem-solving.',
     features: ['All standard identities — sum, product, double angle, half angle','Graphs of all six trig functions with transformations','Inverse trigonometric functions with domain and range','JEE-level solved examples for each concept','Important results and shortcuts highlighted','Previous year JEE questions with solutions']
   },
   { id: 10, title: 'Quadratic Equations', cls: '11', board: null, subject: 'Mathematics', price: 120,
     cover: { light: '../assets/covers/quad-light.png', dark: '../assets/covers/quad-dark.png' },
+    preview: 'https://drive.google.com/file/d/1Hj4jwQ8U-_7N836lrhaXF9tEp6sWnFjv/view?usp=drive_link',
     description: 'JEE-focused notes on <strong>Quadratic Equations</strong> — decision frameworks, attack protocols, and trap libraries built for fast, accurate exam execution.',
     features: [
       '<strong>Nature of Roots via Δ + Sign Logic</strong><br><span style="font-size:13px;">Real / equal / complex with correct condition handling (including edge cases)</span>',
