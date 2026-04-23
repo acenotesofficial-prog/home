@@ -9,7 +9,7 @@ const NOTES = [
   },
   { id: 2, title: 'Some Basic Concepts Of Chemistry', cls: '11', board: null, subject: 'Chemistry', price: 100,
     cover: { light: '../assets/covers/sbcc-light.png', dark: '../assets/covers/sbcc-dark.png' },
-    preview: 'https://drive.google.com/file/d/1DfwP-V7bD9w-D8NApD55_tKgzpHRPZBy/view?usp=drive_link',
+    preview: 'https://drive.google.com/file/d/143C3mVQ97s5cvXNNM4dn8GgTRnyOloMk/view?usp=sharing',
     description: 'Foundation notes for <strong>Some Basic Concepts of Chemistry</strong> — mole concept, stoichiometry, concentration terms, and limiting reagent for JEE.',
     features: ['Complete mole concept with solved numerical examples','Stoichiometry and balancing equations explained clearly','All concentration terms: molarity, molality, normality, mole fraction','Limiting reagent and percentage yield problems','JEE-pattern MCQs and tips included','Quick-reference formula sheet at the end']
   },
