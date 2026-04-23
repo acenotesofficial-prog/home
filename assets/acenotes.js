@@ -44,6 +44,8 @@ const NOTES = [
   },
   { id: 11, title: 'Structure of Atom', cls: '11', board: null, subject: 'Chemistry', price: 120,
     cover: { light: '../assets/covers/soa-light.png', dark: '../assets/covers/soa-dark.png' },
+    preview: 'https://drive.google.com/file/d/143C3mVQ97s5cvXNNM4dn8GgTRnyOloMk/view?usp=sharing',
+   
     description: 'Comprehensive notes on <strong>Structure of Atom</strong> for JEE — atomic models, quantum mechanics, electronic configuration, and dual nature of matter with exam-focused problem-solving.',
     features: [
       '<strong>Historical Atomic Models</strong><br><span style="font-size:13px;">Thomson, Rutherford, and Bohr models with limitations and experimental basis</span>',
