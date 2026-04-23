@@ -33,13 +33,29 @@ const NOTES = [
       '<strong>Vieta\'s Framework (p, q method)</strong><br><span style="font-size:13px;">Sum, product, symmetric expressions, and fast evaluation of root-based expressions</span>',
       '<strong>Root Transformations</strong><br><span style="font-size:13px;">Shift, scaling, reciprocals, and forming new equations without solving roots</span>',
       '<strong>Location of Roots (Core JEE Topic)</strong><br><span style="font-size:13px;">Point &amp; interval methods using: Δ condition + af(k) sign + vertex position</span>',
-      '<strong>Decision Tree for All Cases (6-case system)</strong><br><span style="font-size:13px;">Instantly classify any “roots relative to k / interval” problem</span>',
+      '<strong>Decision Tree for All Cases (6-case system)</strong><br><span style="font-size:13px;">Instantly classify any "roots relative to k / interval" problem</span>',
       '<strong>Newton\'s Sums (Power Expressions)</strong><br><span style="font-size:13px;">Efficient handling of αⁿ + βⁿ without expansion</span>',
       '<strong>Descartes\' Rule of Signs (Screening Tool)</strong><br><span style="font-size:13px;">Quick elimination strategy for MCQs</span>',
       '<strong>Quadratic Inequalities &amp; Sign Analysis</strong><br><span style="font-size:13px;">Systematic approach using graph + sign logic</span>',
       '<strong>Attack Protocol (Core Feature)</strong><br><span style="font-size:13px;">Step-by-step method: classify → choose tool → execute → trap-check</span>',
       '<strong>Trap Library (High Value)</strong><br><span style="font-size:13px;">Common JEE mistakes explicitly highlighted: sign errors in Vieta, misuse of f(k), confusion between S₂ and p², vertex condition misses</span>',
       '<strong>Practice Sets (Exam-Oriented)</strong><br><span style="font-size:13px;">Each set includes: Direct → Disguised → Integrated → Trap questions, designed to simulate actual JEE thinking patterns</span>'
+    ]
+  },
+  { id: 11, title: 'Structure of Atom', cls: '11', board: null, subject: 'Chemistry', price: 120,
+    cover: { light: '../assets/covers/soa-light.png', dark: '../assets/covers/soa-dark.png' },
+    description: 'Comprehensive notes on <strong>Structure of Atom</strong> for JEE — atomic models, quantum mechanics, electronic configuration, and dual nature of matter with exam-focused problem-solving.',
+    features: [
+      '<strong>Historical Atomic Models</strong><br><span style="font-size:13px;">Thomson, Rutherford, and Bohr models with limitations and experimental basis</span>',
+      '<strong>Quantum Mechanical Model</strong><br><span style="font-size:13px;">Wave-particle duality, de Broglie equation, Heisenberg uncertainty principle</span>',
+      '<strong>Quantum Numbers & Orbitals</strong><br><span style="font-size:13px;">n, l, mₗ, mₛ with shapes, nodes, and energy ordering of all orbitals</span>',
+      '<strong>Electronic Configuration Rules</strong><br><span style="font-size:13px;">Aufbau principle, Pauli exclusion, Hund\'s rule with exceptions (Cr, Cu, etc.)</span>',
+      '<strong>Photoelectric Effect & Radiation</strong><br><span style="font-size:13px;">Einstein\'s equation, work function, threshold frequency, and numerical problems</span>',
+      '<strong>Hydrogen Spectrum</strong><br><span style="font-size:13px;">Rydberg formula, spectral series (Lyman, Balmer, Paschen), and energy calculations</span>',
+      '<strong>Bohr\'s Model Calculations</strong><br><span style="font-size:13px;">Radius, velocity, energy, and angular momentum of electrons in hydrogen-like atoms</span>',
+      '<strong>JEE-Level Solved Examples</strong><br><span style="font-size:13px;">Step-by-step solutions to previous year JEE Main & Advanced questions</span>',
+      '<strong>Common Traps & Mistakes</strong><br><span style="font-size:13px;">Frequent errors in quantum number problems, configuration exceptions, and formula misapplication</span>',
+      '<strong>Quick Formula Sheet</strong><br><span style="font-size:13px;">All important formulas and constants compiled for last-minute revision</span>'
     ]
   },
 ];
