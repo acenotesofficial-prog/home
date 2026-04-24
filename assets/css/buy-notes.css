@@ -383,3 +383,18 @@
   .nc-price-sub { display: none; }
   .nc-btn { padding: 6px 10px; font-size: 11px; border-radius: 7px; }
 }
+
+/* ── coming soon tabs ── */
+.ctab-soon { opacity: .45; cursor: default; }
+.ctab-soon:hover::after { transform: scaleX(0) !important; }
+
+/* ── catalog toast ── */
+#catalog-toast {
+  position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(16px);
+  background: var(--bg-card); color: var(--text); border: 1.5px solid var(--border);
+  padding: 12px 24px; border-radius: 50px; font-size: 14px; font-weight: 600;
+  box-shadow: 0 8px 24px var(--shadow); opacity: 0;
+  transition: opacity .25s ease, transform .25s ease;
+  pointer-events: none; z-index: 9999; white-space: nowrap;
+}
+#catalog-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }

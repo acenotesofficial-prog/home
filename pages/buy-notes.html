@@ -16,7 +16,6 @@
 <div class="catalog-page">
   <div class="container">
 
-    <!-- Page header -->
     <div class="catalog-header">
       <div class="catalog-header-left">
         <h1 class="catalog-title">Notes Catalog</h1>
@@ -27,45 +26,41 @@
       </div>
     </div>
 
-    <!-- Class tabs -->
     <div class="class-tabs-wrap">
       <div class="class-tabs" id="class-tabs">
-        <button class="ctab" data-cls="6">6<span class="ctab-label">Foundation</span></button>
-        <button class="ctab" data-cls="7">7<span class="ctab-label">Foundation</span></button>
-        <button class="ctab" data-cls="8">8<span class="ctab-label">Foundation</span></button>
-        <button class="ctab" data-cls="9">9<span class="ctab-label">Board</span></button>
+        <button class="ctab ctab-soon" data-cls="6">6<span class="ctab-label">Foundation</span></button>
+        <button class="ctab ctab-soon" data-cls="7">7<span class="ctab-label">Foundation</span></button>
+        <button class="ctab ctab-soon" data-cls="8">8<span class="ctab-label">Foundation</span></button>
+        <button class="ctab ctab-soon" data-cls="9">9<span class="ctab-label">Board</span></button>
         <button class="ctab" data-cls="10">10<span class="ctab-label">Board</span></button>
         <button class="ctab ctab-jee" data-cls="11">11<span class="ctab-label">JEE</span></button>
-        <button class="ctab ctab-jee" data-cls="12">12<span class="ctab-label">JEE</span></button>
+        <button class="ctab ctab-soon ctab-jee" data-cls="12">12<span class="ctab-label">JEE</span></button>
       </div>
     </div>
 
-    <!-- Board row -->
     <div class="board-row" id="board-row" style="display:none;">
       <button class="board-chip" data-board="CBSE">CBSE</button>
       <button class="board-chip" data-board="ICSE">ICSE</button>
     </div>
 
-    <!-- Subject chips -->
     <div class="subject-row-wrap" id="subject-row-wrap" style="display:none;">
       <div class="subject-row" id="subject-row"></div>
     </div>
 
-    <!-- Content -->
     <div id="catalog-content">
-
       <div class="catalog-placeholder" id="placeholder">
         <div class="placeholder-icon">📚</div>
         <h3>Select a class above</h3>
         <p>Your notes will appear here.</p>
       </div>
-
       <div id="sections-wrap" style="display:none;"></div>
-
     </div>
 
   </div>
 </div>
+
+<!-- Toast -->
+<div id="catalog-toast"></div>
 
 <script src="../assets/acenotes.js"></script>
 <script>
@@ -76,8 +71,17 @@ const SUBJECTS_JEE  = ['Physics','Chemistry','Mathematics'];
 const SUBJECT_ICONS = {'Mathematics':'📐','Physics':'⚡','Chemistry':'🧪','English Language':'📝','English Literature':'📚','Biology':'🧬','Computer':'💻','History':'🏛️','Geography':'🌍'};
 
 let currentCls = null, currentBoard = null, activeSub = 'all';
+let toastTimer = null;
 
 function isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
+
+function showToast(msg) {
+  const t = document.getElementById('catalog-toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 3000);
+}
 
 function noteCard(note) {
   const src = note.cover ? (isDark() ? note.cover.dark : note.cover.light) : null;
@@ -170,7 +174,13 @@ function selectClass(cls) {
   }
 }
 
-document.querySelectorAll('.ctab').forEach(b => b.addEventListener('click', () => selectClass(b.dataset.cls)));
+document.querySelectorAll('.ctab').forEach(b => b.addEventListener('click', () => {
+  if (b.classList.contains('ctab-soon')) {
+    showToast(`Notes for Class ${b.dataset.cls} coming soon`);
+    return;
+  }
+  selectClass(b.dataset.cls);
+}));
 
 document.querySelectorAll('.board-chip').forEach(b => b.addEventListener('click', function() {
   document.querySelectorAll('.board-chip').forEach(x => x.classList.remove('active'));
