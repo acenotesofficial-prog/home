@@ -106,7 +106,16 @@ function renderNavbar(opts) {
   </a>
   <ul class="nav-links">
     <li><a href="${base}index.html" ${cur==='index'?'class="active"':''}>Home</a></li>
-    <li><a href="${base}pages/buy-notes.html" ${cur==='catalog'?'class="active"':''}>Notes Catalog</a></li>
+    <li class="nav-dropdown-wrap">
+      <button class="nav-dropdown-btn ${cur==='catalog'||cur==='testpapers'?'active':''}" aria-expanded="false">
+        Catalog
+        <svg class="nav-dd-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+      </button>
+      <div class="nav-dropdown">
+        <a href="${base}pages/buy-notes.html" class="nav-dd-item ${cur==='catalog'?'nav-dd-active':''}"><span class="nav-dd-icon">📚</span><span>Notes</span></a>
+        <a href="${base}pages/test-papers.html" class="nav-dd-item ${cur==='testpapers'?'nav-dd-active':''}"><span class="nav-dd-icon">📝</span><span>Test Papers</span></a>
+      </div>
+    </li>
     <li><a href="${base}index.html#pricing">Pricing</a></li>
     <li><a href="${base}index.html#contact">Contact</a></li>
     <li>
@@ -128,9 +137,26 @@ function renderNavbar(opts) {
   <a href="${base}pages/buy-notes.html" class="bottom-bar-item ${cur==='catalog'?'active':''}">
     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
   </a>
+  <a href="${base}pages/test-papers.html" class="bottom-bar-item ${cur==='testpapers'?'active':''}">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+  </a>
 </nav>`;
 
   document.querySelectorAll('.an-theme-toggle').forEach(btn => {
     btn.addEventListener('click', () => applyTheme(getTheme() !== 'dark'));
   });
+
+  // Catalog dropdown
+  const ddWrap = document.querySelector('.nav-dropdown-wrap');
+  if (ddWrap) {
+    const ddBtn = ddWrap.querySelector('.nav-dropdown-btn');
+    const dd = ddWrap.querySelector('.nav-dropdown');
+    ddBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = ddWrap.classList.toggle('open');
+      ddBtn.setAttribute('aria-expanded', open);
+    });
+    document.addEventListener('click', () => { ddWrap.classList.remove('open'); ddBtn.setAttribute('aria-expanded', false); });
+    dd.addEventListener('click', e => e.stopPropagation());
+  }
 }

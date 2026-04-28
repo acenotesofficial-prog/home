@@ -66,7 +66,7 @@
 <script>
 renderNavbar({ base: '../', cur: 'catalog' });
 
-const SUBJECTS_6_10 = ['English Language','English Literature','Physics','Chemistry','Mathematics','Biology','Computer','History','Geography'];
+const SUBJECTS_6_10 = ['English Language'];
 const SUBJECTS_JEE  = ['Physics','Chemistry','Mathematics'];
 const SUBJECT_ICONS = {'Mathematics':'📐','Physics':'⚡','Chemistry':'🧪','English Language':'📝','English Literature':'📚','Biology':'🧬','Computer':'💻','History':'🏛️','Geography':'🌍'};
 
@@ -183,6 +183,12 @@ document.querySelectorAll('.ctab').forEach(b => b.addEventListener('click', () =
 }));
 
 document.querySelectorAll('.board-chip').forEach(b => b.addEventListener('click', function() {
+  // Check if CBSE is clicked for class 10
+  if (this.dataset.board === 'CBSE' && currentCls === '10') {
+    showToast('CBSE Class 10 notes coming soon');
+    return;
+  }
+  
   document.querySelectorAll('.board-chip').forEach(x => x.classList.remove('active'));
   this.classList.add('active');
   currentBoard = this.dataset.board;
