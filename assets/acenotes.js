@@ -3,7 +3,7 @@
 // ── PWA Install Prompt ──────────────────────────────────────────
 (function(){
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js').catch(() => {});
+    navigator.serviceWorker.register('/home/sw.js').catch(() => {});
   }
 
   let deferredPrompt = null;

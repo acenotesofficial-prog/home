@@ -2,12 +2,12 @@
   "name": "AceNotes",
   "short_name": "AceNotes",
   "description": "Premium study notes for Classes 6–12 · Board & JEE",
-  "start_url": "/",
+  "start_url": "/home/",
   "display": "standalone",
   "background_color": "#0f1117",
   "theme_color": "#0f1117",
   "icons": [
-    { "src": "/assets/avatars/LOGO.png", "sizes": "192x192", "type": "image/png" },
-    { "src": "/assets/avatars/LOGO.png", "sizes": "512x512", "type": "image/png" }
+    { "src": "/home/assets/avatars/LOGO.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/home/assets/avatars/LOGO.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
