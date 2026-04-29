@@ -115,7 +115,8 @@
     color:var(--text);text-decoration:none;
     transition:background .15s,color .15s;
   }
-  .nav-dd-item:hover{background:var(--bg-soft);color:var(--accent);}
+  .nav-dd-item:hover{background:#f3f4f6;color:var(--accent);}
+  [data-theme="dark"] .nav-dd-item:hover{background:#1f2230;color:var(--accent);}
   .nav-dd-active{color:var(--accent);background:var(--accent-soft);}
   .nav-dd-icon{font-size:16px;}
 
