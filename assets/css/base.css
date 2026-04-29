@@ -142,6 +142,22 @@
   .pw-eye:hover{color:var(--accent);background:var(--bg-soft);}
   .pw-eye svg{display:block;flex-shrink:0;}
 
+  /* PWA Install Popup */
+  .pwa-popup{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--bg-card);border:1px solid var(--border);border-radius:16px;box-shadow:0 12px 40px rgba(0,0,0,.25);padding:20px 22px;width:min(340px,calc(100vw - 32px));z-index:9999;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;}
+  .pwa-popup.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:auto;}
+  .pwa-popup-top{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .pwa-popup-logo{width:44px;height:44px;border-radius:10px;object-fit:contain;background:var(--bg-soft);padding:4px;flex-shrink:0;}
+  .pwa-popup-title{font-size:15px;font-weight:700;color:var(--text);}
+  .pwa-popup-sub{font-size:12px;color:var(--text-muted);margin-top:2px;}
+  .pwa-popup-features{list-style:none;margin-bottom:16px;display:flex;flex-direction:column;gap:5px;}
+  .pwa-popup-features li{font-size:13px;color:var(--text-muted);display:flex;align-items:center;gap:7px;}
+  .pwa-popup-features li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--accent);flex-shrink:0;}
+  .pwa-popup-actions{display:flex;gap:10px;}
+  .pwa-install-btn{flex:1;background:var(--accent);color:#fff;border:none;border-radius:9px;padding:10px 0;font-size:14px;font-weight:700;cursor:pointer;transition:opacity .2s;}
+  .pwa-install-btn:hover{opacity:.88;}
+  .pwa-dismiss-btn{background:var(--bg-soft);color:var(--text-muted);border:1px solid var(--border);border-radius:9px;padding:10px 14px;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
+  .pwa-dismiss-btn:hover{background:var(--border);}
+
   /* Cart toast */
   .cart-toast{position:fixed;bottom:30px;right:30px;padding:14px 22px;border-radius:10px;font-size:15px;font-weight:600;color:white;opacity:0;transform:translateY(10px);transition:all .3s ease;pointer-events:none;z-index:9999;}
   .cart-toast.show{opacity:1;transform:translateY(0);}

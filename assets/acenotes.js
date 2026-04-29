@@ -1,5 +1,68 @@
 // ── AceNotes shared data & components ──────────────────────────
 
+// ── PWA Install Prompt ──────────────────────────────────────────
+(function(){
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').catch(() => {});
+  }
+
+  let deferredPrompt = null;
+  const DISMISSED_KEY = 'acenotes-pwa-dismissed';
+
+  function buildPopup() {
+    if (document.getElementById('pwa-install-popup')) return;
+    const base = document.querySelector('link[rel="manifest"]')?.href.includes('/pages/') ? '../' : '';
+    const el = document.createElement('div');
+    el.id = 'pwa-install-popup';
+    el.className = 'pwa-popup';
+    el.innerHTML = `
+      <div class="pwa-popup-top">
+        <img class="pwa-popup-logo" src="${base}assets/avatars/LOGO.png" alt="AceNotes">
+        <div><div class="pwa-popup-title">Install AceNotes</div><div class="pwa-popup-sub">Add to your home screen</div></div>
+      </div>
+      <ul class="pwa-popup-features">
+        <li>Opens in a focused, distraction-free window</li>
+        <li>Faster access to notes &amp; tests</li>
+        <li>Works like a native app</li>
+      </ul>
+      <div class="pwa-popup-actions">
+        <button class="pwa-install-btn" id="pwa-install-btn">Install</button>
+        <button class="pwa-dismiss-btn" id="pwa-dismiss-btn">Not now</button>
+      </div>`;
+    document.body.appendChild(el);
+
+    document.getElementById('pwa-install-btn').addEventListener('click', () => {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      deferredPrompt.userChoice.then(() => { deferredPrompt = null; hidePopup(); });
+    });
+    document.getElementById('pwa-dismiss-btn').addEventListener('click', () => {
+      try { sessionStorage.setItem(DISMISSED_KEY, '1'); } catch(e) {}
+      hidePopup();
+    });
+  }
+
+  function showPopup() {
+    try { if (sessionStorage.getItem(DISMISSED_KEY)) return; } catch(e) {}
+    buildPopup();
+    setTimeout(() => document.getElementById('pwa-install-popup')?.classList.add('show'), 100);
+  }
+
+  function hidePopup() {
+    const el = document.getElementById('pwa-install-popup');
+    if (el) { el.classList.remove('show'); }
+  }
+
+  window.addEventListener('beforeinstallprompt', e => {
+    e.preventDefault();
+    deferredPrompt = e;
+    showPopup();
+  });
+
+  window.addEventListener('appinstalled', hidePopup);
+})();
+
+
 // ── Notes catalog data ──────────────────────────────────────────
 const NOTES = [
   { id: 1, title: 'English Language Smart Revision ICSE', cls: '10', board: 'ICSE', subject: 'English Language', price: 80,
