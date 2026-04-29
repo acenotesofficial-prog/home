@@ -100,6 +100,7 @@
 .footer-icon-btn:hover{background:#4e6ef2;color:#fff;transform:translateY(-3px);}
 
 @media(max-width:900px){
+  .hero-bg{background-position:center center;}
   .offer-grid{grid-template-columns:1fr;}
   .founder-card{flex-direction:column;text-align:center;padding:40px 30px;}
   .founder-pfp{width:150px;height:150px;min-width:150px;font-size:64px;margin:0 auto;}
@@ -116,7 +117,7 @@
   .footer-social-icons{justify-content:center;}
 }
 @media(max-width:600px){
-  .hero-bg{background-position:75% center;}
+  .hero-bg{background-position:center center;}
   .hero-text h1{font-size:36px;}
   .hero-text p{font-size:16px;}
   .section-header h2{font-size:28px;}
