@@ -68,7 +68,7 @@
         <h1>Users</h1>
       </div>
       <div style="display:flex;align-items:center;gap:10px;">
-        <button onclick="load()" style="font-size:13px;font-weight:700;color:var(--text-muted);padding:7px 14px;border:1.5px solid var(--border);border-radius:10px;background:none;cursor:pointer;">&#x21bb; Refresh</button>
+        <button onclick="window._loadUsers()" style="font-size:13px;font-weight:700;color:var(--text-muted);padding:7px 14px;border:1.5px solid var(--border);border-radius:10px;background:none;cursor:pointer;">&#x21bb; Refresh</button>
         <span class="admin-badge">🔐 Admin</span>
       </div>
     </div>
@@ -114,12 +114,14 @@ onAuthStateChanged(auth, async user => {
 });
 
 async function load() {
+  window._loadUsers = load;
   const [usersSnap, ordersSnap] = await Promise.all([
     getDocs(collection(db, 'users')),
     getDocs(collection(db, 'orders'))
   ]);
   allOrders = ordersSnap.docs.map(d => d.data());
   allUsers = usersSnap.docs.map(d => ({ uid: d.id, ...d.data() })).filter(u => !u.isAdmin);
+  console.log('Total docs:', usersSnap.docs.length, 'Non-admin:', allUsers.length);
   document.querySelector('.au-header h1').textContent = `Users (${allUsers.length})`;
   renderList(allUsers);
 }

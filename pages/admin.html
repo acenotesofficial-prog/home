@@ -79,9 +79,6 @@ async function loadDashboard() {
   const revenue = orders.filter(o => o.status === 'approved' && !adminUids.has(o.uid)).reduce((s, o) => s + (o.total || 0), 0);
   const displayOrders = orders.filter(o => !(adminUids.has(o.uid) && o.status === 'approved'));
 
-  const pending = orders.filter(o => o.status === 'pending');
-  const revenue = orders.filter(o => o.status === 'approved').reduce((s, o) => s + (o.total || 0), 0);
-
   document.getElementById('stat-orders').textContent  = displayOrders.length;
   document.getElementById('stat-pending').textContent = pending.length;
   document.getElementById('stat-revenue').textContent = '₹' + revenue;
