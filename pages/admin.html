@@ -73,22 +73,26 @@ async function loadDashboard() {
   const ordersSnap = await getDocs(collection(db, 'orders'));
   const usersSnap = await getDocs(collection(db, 'users'));
   const adminUids = new Set(usersSnap.docs.filter(d => d.data().isAdmin).map(d => d.id));
-  const orders = ordersSnap.docs.map(d => ({ docId: d.id, ...d.data() })).filter(o => !adminUids.has(o.uid));
+  const orders = ordersSnap.docs.map(d => ({ docId: d.id, ...d.data() }));
+
+  const pending = orders.filter(o => o.status === 'pending');
+  const revenue = orders.filter(o => o.status === 'approved' && !adminUids.has(o.uid)).reduce((s, o) => s + (o.total || 0), 0);
+  const displayOrders = orders.filter(o => !(adminUids.has(o.uid) && o.status === 'approved'));
 
   const pending = orders.filter(o => o.status === 'pending');
   const revenue = orders.filter(o => o.status === 'approved').reduce((s, o) => s + (o.total || 0), 0);
 
-  document.getElementById('stat-orders').textContent  = orders.length;
+  document.getElementById('stat-orders').textContent  = displayOrders.length;
   document.getElementById('stat-pending').textContent = pending.length;
   document.getElementById('stat-revenue').textContent = '₹' + revenue;
 
   const tbody = document.getElementById('orders-tbody');
-  if (!orders.length) {
+  if (!displayOrders.length) {
     tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text-faint);padding:32px;">No orders yet</td></tr>`;
     return;
   }
 
-  tbody.innerHTML = orders.map(o => `
+  tbody.innerHTML = displayOrders.map(o => `
     <tr>
       <td><strong>${o.id || o.docId}</strong></td>
       <td>${o.userName || '—'}<br><span style="font-size:11px;color:var(--text-faint);">${o.userEmail || ''}</span></td>
