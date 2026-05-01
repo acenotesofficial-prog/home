@@ -71,7 +71,9 @@ onAuthStateChanged(auth, async user => {
 
 async function loadDashboard() {
   const ordersSnap = await getDocs(collection(db, 'orders'));
-  const orders = ordersSnap.docs.map(d => ({ docId: d.id, ...d.data() }));
+  const usersSnap = await getDocs(collection(db, 'users'));
+  const adminUids = new Set(usersSnap.docs.filter(d => d.data().isAdmin).map(d => d.id));
+  const orders = ordersSnap.docs.map(d => ({ docId: d.id, ...d.data() })).filter(o => !adminUids.has(o.uid));
 
   const pending = orders.filter(o => o.status === 'pending');
   const revenue = orders.filter(o => o.status === 'approved').reduce((s, o) => s + (o.total || 0), 0);
