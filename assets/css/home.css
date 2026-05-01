@@ -101,11 +101,13 @@
 
 @media(max-width:900px){
   .hero-bg{background-position:55% center;}
+  .hero-content{flex-direction:column;text-align:center;gap:40px;padding-top:20px;align-items:center;}
+  .hero-text{display:flex;flex-direction:column;align-items:center;width:100%;}
+  .hero-text p{max-width:100%;text-align:center;}
   .offer-grid{grid-template-columns:1fr;}
   .founder-card{flex-direction:column;text-align:center;padding:40px 30px;}
   .founder-pfp{width:150px;height:150px;min-width:150px;font-size:64px;margin:0 auto;}
   .founder-name{font-size:32px;}
-  .hero-content{flex-direction:column;text-align:center;gap:40px;padding-top:20px;}
   .hero-text h1{font-size:48px;}
   .hero-text p{max-width:100%;}
   .hero-image img{max-width:420px;}
@@ -118,6 +120,9 @@
 }
 @media(max-width:600px){
   .hero-bg{background-position:55% center;}
+  .hero-text{display:flex;flex-direction:column;align-items:center;}
+  .hero-text h1,.hero-text p{text-align:center;}
+  .hero-text .btn{align-self:center;}
   .hero-text h1{font-size:36px;}
   .hero-text p{font-size:16px;}
   .section-header h2{font-size:28px;}

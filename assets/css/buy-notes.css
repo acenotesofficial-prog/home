@@ -40,6 +40,20 @@
   white-space: nowrap;
 }
 
+/* ── class filter row ── */
+.class-filter-row{
+  display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;
+}
+.cls-filter{
+  padding:6px 16px;border-radius:50px;border:1.5px solid var(--border);
+  background:var(--bg-soft);color:var(--text-muted);font-size:13px;font-weight:600;
+  cursor:pointer;transition:all .18s;white-space:nowrap;
+}
+.cls-filter span{font-size:11px;opacity:.7;margin-left:3px;}
+.cls-filter:hover{border-color:var(--text-faint);color:var(--text);}
+.cls-filter.active{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(78,110,242,.3);}
+.cls-filter.active span{opacity:.85;}
+
 /* ── class tabs ── */
 .class-tabs-wrap {
   border-bottom: 2px solid var(--border);

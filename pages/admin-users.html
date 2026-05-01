@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Users – AceNotes Admin</title>
+<link rel="icon" type="image/png" href="../assets/avatars/LOGO.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('acenotes-theme');}catch(e){}if(!t){var m=document.cookie.match(/acenotes-theme=(dark|light)/);if(m)t=m[1];}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+<style>
+  .au-page{min-height:100vh;padding-top:calc(var(--navbar-h) + 32px);padding-bottom:80px;}
+  .au-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;flex-wrap:wrap;gap:12px;}
+  .au-header h1{font-size:26px;font-weight:800;color:var(--text);}
+  .au-back{display:flex;align-items:center;gap:6px;font-size:13px;font-weight:700;color:var(--text-muted);text-decoration:none;padding:7px 14px;border:1.5px solid var(--border);border-radius:10px;transition:all .15s;}
+  .au-back:hover{border-color:var(--accent);color:var(--accent);}
+  .au-search{width:100%;max-width:360px;padding:10px 16px;font-size:14px;border:1.5px solid var(--border);border-radius:10px;background:var(--input-bg);color:var(--text);outline:none;margin-bottom:20px;}
+  .au-search:focus{border-color:var(--accent);}
+  .au-list{display:flex;flex-direction:column;gap:10px;}
+  .au-row{display:flex;align-items:center;gap:14px;padding:14px 18px;background:var(--bg-card);border:1.5px solid var(--border);border-radius:14px;cursor:pointer;transition:border-color .15s,box-shadow .15s;}
+  .au-row:hover{border-color:var(--accent-border);box-shadow:0 4px 16px var(--shadow);}
+  .au-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0;}
+  .au-info{flex:1;min-width:0;}
+  .au-name{font-size:14px;font-weight:700;color:var(--text);}
+  .au-email{font-size:12px;color:var(--text-faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .au-meta{display:flex;gap:8px;align-items:center;flex-shrink:0;}
+  .au-spent{font-size:13px;font-weight:800;color:var(--accent);}
+  .au-joined{font-size:11px;color:var(--text-faint);}
+
+  /* Drawer */
+  .au-drawer-overlay{position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:8000;display:none;backdrop-filter:blur(2px);}
+  .au-drawer-overlay.open{display:block;}
+  .au-drawer{position:fixed;top:0;right:0;width:min(440px,100vw);height:100%;background:var(--bg-card);border-left:1.5px solid var(--border);z-index:8001;transform:translateX(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);overflow-y:auto;display:flex;flex-direction:column;}
+  .au-drawer.open{transform:translateX(0);}
+  .au-drawer-head{display:flex;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1.5px solid var(--border);flex-shrink:0;}
+  .au-drawer-title{font-size:16px;font-weight:800;color:var(--text);}
+  .au-drawer-close{background:none;border:none;font-size:20px;color:var(--text-faint);cursor:pointer;padding:4px 8px;border-radius:8px;}
+  .au-drawer-close:hover{background:var(--bg-soft);color:var(--text);}
+  .au-drawer-body{padding:24px;display:flex;flex-direction:column;gap:20px;}
+  .au-drawer-avatar{width:64px;height:64px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:800;color:#fff;margin-bottom:4px;}
+  .au-drawer-name{font-size:20px;font-weight:800;color:var(--text);}
+  .au-drawer-sub{font-size:13px;color:var(--text-faint);}
+  .au-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .au-info-item{background:var(--bg-soft);border:1.5px solid var(--border);border-radius:12px;padding:14px 16px;}
+  .au-info-label{font-size:10px;font-weight:700;color:var(--text-faint);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;}
+  .au-info-val{font-size:14px;font-weight:700;color:var(--text);word-break:break-all;}
+  .au-info-item.full{grid-column:1/-1;}
+  .au-notes-list{display:flex;flex-direction:column;gap:8px;}
+  .au-note-row{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg-soft);border:1.5px solid var(--border);border-radius:10px;font-size:13px;}
+  .au-note-title{font-weight:600;color:var(--text);}
+  .au-note-price{font-weight:800;color:var(--accent);}
+  .au-section-title{font-size:13px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+  .au-empty{font-size:13px;color:var(--text-faint);text-align:center;padding:16px;}
+  .au-total-row{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--accent-soft);border:1.5px solid var(--accent-border);border-radius:12px;font-size:14px;font-weight:700;color:var(--text);}
+  .au-total-val{font-size:18px;font-weight:900;color:var(--accent);}
+</style>
+</head>
+<body>
+
+<div id="navbar-mount"></div>
+
+<div class="au-page" id="au-page" style="display:none;">
+  <div class="container">
+
+    <div class="au-header">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <a href="admin.html" class="au-back">← Admin</a>
+        <h1>Users</h1>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <button onclick="load()" style="font-size:13px;font-weight:700;color:var(--text-muted);padding:7px 14px;border:1.5px solid var(--border);border-radius:10px;background:none;cursor:pointer;">&#x21bb; Refresh</button>
+        <span class="admin-badge">🔐 Admin</span>
+      </div>
+    </div>
+
+    <input class="au-search" id="au-search" type="text" placeholder="Search by name or email…">
+
+    <div class="au-list" id="au-list">
+      <div style="text-align:center;padding:40px;color:var(--text-faint);">Loading users…</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Drawer -->
+<div class="au-drawer-overlay" id="au-overlay" onclick="closeDrawer()"></div>
+<div class="au-drawer" id="au-drawer">
+  <div class="au-drawer-head">
+    <div class="au-drawer-title">User Details</div>
+    <button class="au-drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="au-drawer-body" id="au-drawer-body"></div>
+</div>
+
+<script src="../assets/acenotes.js"></script>
+<script type="module">
+import { auth, db } from '../assets/firebase.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
+import { collection, getDocs, doc, getDoc, query, where } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js';
+
+renderNavbar({ base: '../', cur: '' });
+
+const COLORS = ['#4e6ef2','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899'];
+const color = name => COLORS[name.charCodeAt(0) % COLORS.length];
+
+let allUsers = [], allOrders = [];
+
+onAuthStateChanged(auth, async user => {
+  if (!user) { location.href = 'auth.html'; return; }
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  if (!snap.exists() || !snap.data().isAdmin) { location.href = 'settings.html'; return; }
+  document.getElementById('au-page').style.display = 'block';
+  load();
+});
+
+async function load() {
+  const [usersSnap, ordersSnap] = await Promise.all([
+    getDocs(collection(db, 'users')),
+    getDocs(collection(db, 'orders'))
+  ]);
+  allOrders = ordersSnap.docs.map(d => d.data());
+  allUsers = usersSnap.docs.map(d => ({ uid: d.id, ...d.data() })).filter(u => !u.isAdmin);
+  document.querySelector('.au-header h1').textContent = `Users (${allUsers.length})`;
+  renderList(allUsers);
+}
+
+function renderList(users) {
+  const list = document.getElementById('au-list');
+  if (!users.length) { list.innerHTML = `<div class="au-empty">No users found.</div>`; return; }
+  list.innerHTML = users.map(u => {
+    const spent = allOrders.filter(o => o.uid === u.uid && o.status === 'approved').reduce((s,o) => s + (o.total||0), 0);
+    const joined = u.joined ? new Date(u.joined).toLocaleDateString() : '—';
+    return `<div class="au-row" onclick="openDrawer('${u.uid}')">
+      <div class="au-avatar" style="background:${color(u.name||'U')}">${(u.name||'U')[0].toUpperCase()}</div>
+      <div class="au-info">
+        <div class="au-name">${u.name || '—'}</div>
+        <div class="au-email">${u.email || '—'}</div>
+      </div>
+      <div class="au-meta">
+        <span class="au-spent">${spent ? '₹'+spent : '—'}</span>
+        <span class="au-joined">${joined}</span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('au-search').addEventListener('input', e => {
+  const q = e.target.value.toLowerCase();
+  renderList(allUsers.filter(u => (u.name||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q)));
+});
+
+window.openDrawer = function(uid) {
+  const u = allUsers.find(x => x.uid === uid);
+  if (!u) return;
+  const orders = allOrders.filter(o => o.uid === uid);
+  const approvedOrders = orders.filter(o => o.status === 'approved');
+  const spent = approvedOrders.reduce((s,o) => s + (o.total||0), 0);
+  const notes = approvedOrders.flatMap(o => o.items || []);
+
+  document.getElementById('au-drawer-body').innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;">
+      <div class="au-drawer-avatar" style="background:${color(u.name||'U')}">${(u.name||'U')[0].toUpperCase()}</div>
+      <div style="flex:1;">
+        <div class="au-drawer-name">${u.name || '—'}</div>
+        <div class="au-drawer-sub">Joined ${u.joined ? new Date(u.joined).toLocaleDateString() : '—'}</div>
+      </div>
+      <button onclick="deleteUserDoc('${u.uid}')" style="background:#fee2e2;color:#dc2626;border:none;padding:7px 14px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;">🗑 Delete</button>
+    </div>
+
+    <div class="au-info-grid">
+      <div class="au-info-item full">
+        <div class="au-info-label">Email</div>
+        <div class="au-info-val">${u.email || '—'}</div>
+      </div>
+      <div class="au-info-item">
+        <div class="au-info-label">WhatsApp</div>
+        <div class="au-info-val">${u.phone ? '+91 '+u.phone : '—'}</div>
+      </div>
+      <div class="au-info-item">
+        <div class="au-info-label">Total Orders</div>
+        <div class="au-info-val">${orders.length}</div>
+      </div>
+      <div class="au-info-item">
+        <div class="au-info-label">Pending</div>
+        <div class="au-info-val">${orders.filter(o=>o.status==='pending').length}</div>
+      </div>
+      <div class="au-info-item">
+        <div class="au-info-label">Approved</div>
+        <div class="au-info-val">${approvedOrders.length}</div>
+      </div>
+    </div>
+
+    <div class="au-total-row">
+      <span>Total Spent</span>
+      <span class="au-total-val">₹${spent}</span>
+    </div>
+
+    <div>
+      <div class="au-section-title">📚 Notes Owned (${notes.length})</div>
+      ${notes.length
+        ? `<div class="au-notes-list">${notes.map(n => `
+            <div class="au-note-row">
+              <span class="au-note-title">${n.title}</span>
+              <span class="au-note-price">₹${n.price}</span>
+            </div>`).join('')}</div>`
+        : `<div class="au-empty">No notes purchased yet.</div>`}
+    </div>`;
+
+  document.getElementById('au-overlay').classList.add('open');
+  document.getElementById('au-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+};
+
+window.deleteUserDoc = async function(uid) {
+  if (!confirm('Delete this user and all their orders permanently?')) return;
+  try {
+    const { deleteDoc, doc: fdoc, query: q, where, collection: col, getDocs } = await import('https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js');
+    const ordersSnap = await getDocs(q(col(db, 'orders'), where('uid', '==', uid)));
+    await Promise.all([
+      ...ordersSnap.docs.map(d => deleteDoc(d.ref)),
+      deleteDoc(fdoc(db, 'users', uid)),
+      deleteDoc(fdoc(db, 'user_notes', uid)),
+    ]);
+    allUsers = allUsers.filter(u => u.uid !== uid);
+    allOrders = allOrders.filter(o => o.uid !== uid);
+    closeDrawer();
+    renderList(allUsers);
+  } catch(e) {
+    alert('Error: ' + e.message);
+  }
+};
+
+window.closeDrawer = function() {
+  document.getElementById('au-overlay').classList.remove('open');
+  document.getElementById('au-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+};
+</script>
+</body>
+</html>

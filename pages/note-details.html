@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Note Details - AceNotes</title>
-<link rel="icon" type="image/png" href="../assets/avatars/Sqare_logo.png">
+<link rel="icon" type="image/png" href="../assets/avatars/LOGO.png">
 <link rel="manifest" href="/home/manifest.json">
 <meta name="theme-color" content="#0f1117">
 <script>(function(){var t=null;try{t=localStorage.getItem('acenotes-theme');}catch(e){}if(!t){var m=document.cookie.match(/acenotes-theme=(dark|light)/);if(m)t=m[1];}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
@@ -54,7 +54,7 @@
           <span class="nd-price-label">one-time</span>
         </div>
         <div class="nd-actions">
-          <a id="nd-whatsapp-btn" href="#" target="_blank" class="nd-btn-cart">🛒 Order via WhatsApp</a>
+          <button id="nd-cart-btn" class="nd-btn-cart" onclick="addToCartFromDetails()">🛒 Add to Cart</button>
           <a id="nd-preview-btn" href="#" class="nd-btn-preview">👁 Download Preview</a>
           <a href="buy-notes.html" class="nd-btn-back">← Back to Catalog</a>
         </div>
@@ -147,9 +147,35 @@ if (!note) {
     imgWrap.innerHTML = `<div class="nd-img-placeholder"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.966 8.966 0 00-6 2.292m0-14.25v14.25"/></svg><span>${note.subject} Notes</span></div>`;
   }
 
-  // WhatsApp order button
-  const msg = `Hello, I would like to order:\n\n${note.title}\nPrice: ₹${note.price}\n\nPlease confirm and provide payment details.`;
-  document.getElementById('nd-whatsapp-btn').href = 'https://wa.me/919163164555?text=' + encodeURIComponent(msg);
+  // Cart button
+  const cartBtn = document.getElementById('nd-cart-btn');
+
+  // Check if already owned
+  (async () => {
+    try {
+      const fbUrl = new URL('../assets/firebase.js', location.href).href;
+      const { auth, db } = await import(fbUrl);
+      const { onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js');
+      const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js');
+      onAuthStateChanged(auth, async user => {
+        if (!user) return;
+        const snap = await getDoc(doc(db, 'user_notes', user.uid));
+        if (snap.exists() && (snap.data().items || []).find(i => i.id === note.id || i.title === note.title)) {
+          cartBtn.textContent = '✅ Owned';
+          cartBtn.style.background = '#16a34a';
+          cartBtn.onclick = () => location.href = 'settings.html#mynotes';
+        }
+      });
+    } catch(e) {}
+  })();
+
+  cartBtn.addEventListener('click', () => {
+    cartAdd({ id: note.id, title: note.title, price: note.price });
+    cartBtn.textContent = '✓ Added to Cart';
+    setTimeout(() => cartBtn.textContent = '🛒 Add to Cart', 2000);
+  });
+
+  // WhatsApp order button — removed, using cart now
 
   // Preview button
   const previewBtn = document.getElementById('nd-preview-btn');

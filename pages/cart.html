@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cart – AceNotes</title>
+<link rel="icon" type="image/png" href="../assets/avatars/LOGO.png">
+<link rel="manifest" href="/home/manifest.json">
+<meta name="theme-color" content="#0f1117">
+<script>(function(){var t=null;try{t=localStorage.getItem('acenotes-theme');}catch(e){}if(!t){var m=document.cookie.match(/acenotes-theme=(dark|light)/);if(m)t=m[1];}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/cart.css">
+</head>
+<body>
+
+<div id="navbar-mount"></div>
+
+<div class="cart-page" style="padding-top:calc(var(--navbar-h) + 32px);">
+  <div class="container">
+    <h1 class="cart-title">Your Cart</h1>
+    <div id="cart-root"></div>
+  </div>
+</div>
+
+<script src="../assets/acenotes.js"></script>
+<script type="module">
+import { auth, db } from '../assets/firebase.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
+import { doc, setDoc, getDoc } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js';
+
+renderNavbar({ base: '../', cur: 'cart' });
+
+let currentUser = null;
+onAuthStateChanged(auth, u => { currentUser = u; });
+
+function render() {
+  const cart = getCart();
+  const root = document.getElementById('cart-root');
+
+  if (!cart.length) {
+    root.innerHTML = `
+      <div class="cart-empty">
+        <span>🛒</span>
+        <p>Your cart is empty</p>
+        <a href="buy-notes.html" class="btn">Browse Notes</a>
+      </div>`;
+    return;
+  }
+
+  const total = cart.reduce((s, i) => s + i.price, 0);
+
+  root.innerHTML = `
+    <div class="cart-layout">
+      <div class="cart-items">
+        <div class="cart-items-list">
+          ${cart.map(item => `
+            <div class="cart-item">
+              <div class="cart-item-name">${item.title}</div>
+              <div class="cart-item-right">
+                <span class="cart-item-price">₹${item.price}</span>
+                <button class="cart-remove-btn" onclick="removeItem(${item.id})" title="Remove">✕</button>
+              </div>
+            </div>`).join('')}
+        </div>
+        <button class="cart-clear-btn" onclick="clearAll()">Clear Cart</button>
+      </div>
+
+      <div class="cart-summary">
+        <h3>Order Summary</h3>
+        ${cart.map(i => `
+          <div class="summary-row">
+            <span>${i.title}</span>
+            <span>₹${i.price}</span>
+          </div>`).join('')}
+        <div class="summary-total">
+          <span>Total</span>
+          <span>₹${total}</span>
+        </div>
+        <div id="order-alert" style="margin-top:14px;"></div>
+        <button class="btn" style="width:100%;margin-top:16px;padding:14px;font-size:15px;font-weight:700;border:none;cursor:pointer;" id="place-order-btn" onclick="placeOrder()">
+          Place Order
+        </button>
+        <p class="cart-login-note" id="login-note" style="display:none;">
+          <a href="auth.html" style="color:var(--accent);font-weight:700;">Sign in</a> to place your order
+        </p>
+      </div>
+    </div>`;
+
+  // Show login note if not signed in
+  onAuthStateChanged(auth, u => {
+    const btn = document.getElementById('place-order-btn');
+    const note = document.getElementById('login-note');
+    if (!u && btn && note) { btn.style.display = 'none'; note.style.display = 'block'; }
+  });
+}
+
+window.removeItem = function(id) {
+  cartRemove(id);
+  render();
+};
+
+window.clearAll = function() {
+  cartClear();
+  render();
+};
+
+window.placeOrder = async function() {
+  if (!currentUser) { location.href = 'auth.html'; return; }
+  const cart = getCart();
+  if (!cart.length) return;
+
+  const btn = document.getElementById('place-order-btn');
+  btn.disabled = true; btn.textContent = 'Placing order...';
+
+  try {
+    const userSnap = await getDoc(doc(db, 'users', currentUser.uid));
+    const userData = userSnap.exists() ? userSnap.data() : {};
+    const orderId = 'ORD-' + Date.now();
+    const total = cart.reduce((s, i) => s + i.price, 0);
+
+    await setDoc(doc(db, 'orders', orderId), {
+      id: orderId,
+      uid: currentUser.uid,
+      userName: userData.name || currentUser.displayName || '',
+      userEmail: currentUser.email,
+      userPhone: userData.phone || '',
+      items: cart.map(i => ({ id: i.id, title: i.title, price: i.price })),
+      total,
+      status: 'pending',
+      date: new Date().toISOString(),
+    });
+
+    cartClear();
+    document.getElementById('cart-root').innerHTML = `
+      <div class="cart-empty">
+        <span>🎉</span>
+        <p style="font-size:20px;font-weight:800;color:var(--text);margin-bottom:8px;">Order Placed!</p>
+        <p style="color:var(--text-muted);margin-bottom:24px;">Your order <strong>${orderId}</strong> is pending approval. You'll get access once approved.</p>
+        <a href="buy-notes.html" class="btn">Continue Shopping</a>
+      </div>`;
+  } catch(e) {
+    document.getElementById('order-alert').innerHTML = `<div class="alert error">${e.message}</div>`;
+    btn.disabled = false; btn.textContent = 'Place Order';
+  }
+};
+
+render();
+</script>
+</body>
+</html>

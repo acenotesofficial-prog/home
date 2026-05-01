@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Test Paper – AceNotes</title>
-<link rel="icon" type="image/png" href="../assets/avatars/Sqare_logo.png">
+<link rel="icon" type="image/png" href="../assets/avatars/LOGO.png">
 <link rel="manifest" href="/home/manifest.json">
 <meta name="theme-color" content="#0f1117">
 <script>(function(){var t=null;try{t=localStorage.getItem('acenotes-theme');}catch(e){}if(!t){var m=document.cookie.match(/acenotes-theme=(dark|light)/);if(m)t=m[1];}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
@@ -91,41 +91,6 @@
 <script src="../assets/acenotes.js"></script>
 <script>
 renderNavbar({ base: '../', cur: 'testpapers' });
-
-const TEST_PAPERS = [
-  {
-    id: 'tp1',
-    title: 'Class 10 ICSE – Bundle 1 (20 Test Papers)',
-    cls: '10', board: 'ICSE', papers: 20,
-    desc: 'A comprehensive collection of 20 full-length test papers designed specifically for Class 10 ICSE students. Each paper mirrors the actual ICSE exam pattern — helping you build speed, accuracy, and confidence before the board exams.',
-    features: [
-      '20 full-length test papers covering all major ICSE Class 10 subjects',
-      'Papers strictly follow the latest ICSE exam pattern and marking scheme',
-      'Includes MCQs, short answer, and long answer sections',
-      'Detailed answer keys provided for every paper',
-      'Covers English, Mathematics, Science, History & Civics, Geography',
-      'Designed for timed practice — fits within actual exam duration',
-      'High-quality print-ready PDF format',
-    ],
-    price: 500,
-  },
-  {
-    id: 'tp2',
-    title: 'Class 10 ICSE – Bundle 2 (20 Test Papers)',
-    cls: '10', board: 'ICSE', papers: 20,
-    desc: 'A second set of 20 full-length test papers for Class 10 ICSE. Ideal for revision and final exam preparation, with fresh questions across all subjects to ensure thorough practice.',
-    features: [
-      '20 fresh full-length test papers — no overlap with Bundle 1',
-      'Papers strictly follow the latest ICSE exam pattern and marking scheme',
-      'Includes MCQs, short answer, and long answer sections',
-      'Detailed answer keys provided for every paper',
-      'Covers English, Mathematics, Science, History & Civics, Geography',
-      'Designed for timed practice — fits within actual exam duration',
-      'High-quality print-ready PDF format',
-    ],
-    price: 500,
-  },
-];
 
 const params = new URLSearchParams(location.search);
 const paper = TEST_PAPERS.find(p => p.id === params.get('id'));

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin – AceNotes</title>
+<link rel="icon" type="image/png" href="../assets/avatars/LOGO.png">
+<script>(function(){var t=null;try{t=localStorage.getItem('acenotes-theme');}catch(e){}if(!t){var m=document.cookie.match(/acenotes-theme=(dark|light)/);if(m)t=m[1];}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+
+<div id="navbar-mount"></div>
+
+<div class="admin-page" id="admin-page" style="display:none;padding-top:calc(var(--navbar-h) + 32px);">
+  <div class="container">
+
+    <div class="admin-header">
+      <h1>Admin Dashboard</h1>
+      <div style="display:flex;gap:10px;align-items:center;">
+        <a href="admin-users.html" style="font-size:13px;font-weight:700;color:var(--accent);text-decoration:none;padding:7px 14px;border:1.5px solid var(--accent-border);border-radius:10px;background:var(--accent-soft);">👥 Users</a>
+        <span class="admin-badge">🔐 Admin</span>
+      </div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-card"><div class="stat-label">Total Orders</div><div class="stat-value" id="stat-orders">—</div></div>
+      <div class="stat-card pending-card"><div class="stat-label">Pending</div><div class="stat-value" id="stat-pending">—</div></div>
+      <div class="stat-card"><div class="stat-label">Revenue</div><div class="stat-value" id="stat-revenue">—</div></div>
+    </div>
+
+    <div class="admin-section">
+      <h2>Orders</h2>
+      <div id="orders-alert"></div>
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>Order ID</th>
+            <th>User</th>
+            <th>Phone</th>
+            <th>Items</th>
+            <th>Total</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Grant</th>
+          </tr>
+        </thead>
+        <tbody id="orders-tbody"></tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<script src="../assets/acenotes.js"></script>
+<script type="module">
+import { auth, db } from '../assets/firebase.js';
+import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
+import { collection, getDocs, doc, getDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js';
+
+renderNavbar({ base: '../', cur: '' });
+
+onAuthStateChanged(auth, async user => {
+  if (!user) { location.href = 'auth.html'; return; }
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  if (!snap.exists() || !snap.data().isAdmin) { location.href = 'settings.html'; return; }
+  document.getElementById('admin-page').style.display = 'block';
+  loadDashboard();
+});
+
+async function loadDashboard() {
+  const ordersSnap = await getDocs(collection(db, 'orders'));
+  const orders = ordersSnap.docs.map(d => ({ docId: d.id, ...d.data() }));
+
+  const pending = orders.filter(o => o.status === 'pending');
+  const revenue = orders.filter(o => o.status === 'approved').reduce((s, o) => s + (o.total || 0), 0);
+
+  document.getElementById('stat-orders').textContent  = orders.length;
+  document.getElementById('stat-pending').textContent = pending.length;
+  document.getElementById('stat-revenue').textContent = '₹' + revenue;
+
+  const tbody = document.getElementById('orders-tbody');
+  if (!orders.length) {
+    tbody.innerHTML = `<tr><td colspan="8" style="text-align:center;color:var(--text-faint);padding:32px;">No orders yet</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = orders.map(o => `
+    <tr>
+      <td><strong>${o.id || o.docId}</strong></td>
+      <td>${o.userName || '—'}<br><span style="font-size:11px;color:var(--text-faint);">${o.userEmail || ''}</span></td>
+      <td>${o.userPhone || '—'}</td>
+      <td>
+        <button class="items-toggle" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='block'?'none':'block'">View</button>
+        <div class="order-items-detail" style="display:none;">${(o.items||[]).map(i => `${i.title} — ₹${i.price}`).join('<br>')}</div>
+      </td>
+      <td><strong>₹${o.total || 0}</strong></td>
+      <td>${o.date ? new Date(o.date).toLocaleDateString() : '—'}</td>
+      <td><span class="badge badge-${o.status||'pending'}">${o.status||'pending'}</span></td>
+      <td>
+        <button class="btn-approve"
+          style="background:${o.status==='approved'?'#16a34a':'#6366f1'};"
+          onclick="grantOrder('${o.docId}', this)"
+          ${o.status==='approved' ? 'disabled' : ''}>
+          ${o.status==='approved' ? 'Granted' : 'Grant'}
+        </button>
+        <button class="btn-delete" style="margin-top:4px;" onclick="deleteOrder('${o.docId}', this)">Delete</button>
+      </td>
+    </tr>`).join('');
+}
+
+window.grantOrder = async function(docId, btn) {
+  btn.disabled = true; btn.textContent = 'Granting...';
+  try {
+    const orderRef = doc(db, 'orders', docId);
+    const snap = await getDoc(orderRef);
+    if (!snap.exists()) return;
+    const items = (snap.data().items || []).map(i => {
+      const note = NOTES.find(n => n.id === i.id || n.id === Number(i.id) || n.title === i.title);
+      return { ...i, id: note ? note.id : i.id, link: i.link || note?.driveLink || '' };
+    });
+    await updateDoc(orderRef, { items, status: 'approved' });
+    btn.textContent = 'Granted';
+    btn.style.background = '#16a34a';
+    // update status badge in same row
+    const badge = btn.closest('tr').querySelector('.badge');
+    if (badge) { badge.textContent = 'approved'; badge.className = 'badge badge-approved'; }
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = 'Grant';
+    showAlert('orders-alert', e.message, 'error');
+  }
+};
+
+window.deleteOrder = async function(docId, btn) {
+  if (!confirm('Delete this order permanently?')) return;
+  btn.disabled = true;
+  try {
+    await import('https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js').then(({ doc: d, deleteDoc }) =>
+      deleteDoc(d(db, 'orders', docId))
+    );
+    btn.closest('tr').remove();
+    loadDashboard();
+  } catch(e) {
+    btn.disabled = false;
+    showAlert('orders-alert', e.message, 'error');
+  }
+};
+
+function showAlert(id, msg, type) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.innerHTML = `<div class="alert ${type}">${msg}</div>`;
+  setTimeout(() => el.innerHTML = '', 4000);
+}
+</script>
+</body>
+</html>

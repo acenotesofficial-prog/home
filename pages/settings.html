@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings – AceNotes</title>
+<link rel="icon" type="image/png" href="../assets/avatars/LOGO.png">
+<link rel="manifest" href="/home/manifest.json">
+<meta name="theme-color" content="#0f1117">
+<script>(function(){var t=null;try{t=localStorage.getItem('acenotes-theme');}catch(e){}if(!t){var m=document.cookie.match(/acenotes-theme=(dark|light)/);if(m)t=m[1];}if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
+<link rel="stylesheet" href="../assets/css/base.css">
+<link rel="stylesheet" href="../assets/css/settings.css">
+<link rel="stylesheet" href="../assets/css/buy-notes.css">
+</head>
+<body class="settings-body">
+
+<div id="navbar-mount"></div>
+
+<div class="sp" style="margin-top:var(--navbar-h);display:none;" id="sp-wrap">
+
+  <!-- Sidebar -->
+  <aside class="sp-sidebar">
+    <div class="sp-sidebar-inner">
+      <div class="sp-user">
+        <div class="sp-avatar" id="sp-avatar"></div>
+        <div>
+          <div class="sp-uname" id="sp-uname"></div>
+          <div class="sp-email" id="sp-email"></div>
+        </div>
+      </div>
+      <nav class="sp-nav">
+        <button class="sp-nav-item active" data-panel="profile">
+          <span class="sp-nav-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </span>
+          Profile
+        </button>
+        <button class="sp-nav-item" data-panel="purchases">
+          <span class="sp-nav-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          </span>
+          Purchases
+        </button>
+        <button class="sp-nav-item" data-panel="mynotes">
+          <span class="sp-nav-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          </span>
+          My Notes
+        </button>
+        <button class="sp-nav-item" data-panel="security">
+          <span class="sp-nav-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          </span>
+          Security
+        </button>
+        <div class="sp-nav-sep"></div>
+        <button class="sp-nav-item" id="admin-nav-btn" style="display:none;" onclick="location.href='admin.html'">
+          <span class="sp-nav-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </span>
+          Admin Panel
+        </button>
+        <div class="sp-nav-sep"></div>
+        <button class="sp-nav-item danger" onclick="logout()">
+          <span class="sp-nav-icon">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+          </span>
+          Sign Out
+        </button>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <main class="sp-main">
+
+    <!-- Profile -->
+    <div class="sp-panel active" id="panel-profile">
+      <div class="sp-panel-title">Profile</div>
+      <div class="sp-panel-sub">Manage your personal information</div>
+      <div id="profile-alert"></div>
+      <form class="s-form" onsubmit="saveProfile(event)" style="max-width:480px;">
+        <div class="form-group">
+          <label>Full Name</label>
+          <input type="text" id="pf-name" required>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" id="pf-email">
+        </div>
+        <div class="form-group">
+          <label>WhatsApp Number</label>
+          <input type="tel" id="pf-phone" placeholder="10-digit number" maxlength="10" inputmode="numeric">
+        </div>
+        <div>
+          <button type="submit" class="s-btn s-btn-primary">Save Changes</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Purchases -->
+    <div class="sp-panel" id="panel-purchases">
+      <div class="sp-panel-title">Purchases</div>
+      <div class="sp-panel-sub">Your order history</div>
+      <div id="purchases-list"></div>
+    </div>
+
+    <!-- My Notes -->
+    <div class="sp-panel" id="panel-mynotes">
+      <div class="sp-panel-title">My Notes</div>
+      <div class="sp-panel-sub">Notes you have access to</div>
+      <div id="mynotes-list"></div>
+    </div>
+
+    <!-- Security -->
+    <div class="sp-panel" id="panel-security">
+      <div class="sp-panel-title">Security</div>
+      <div class="sp-panel-sub">Manage your password and account security</div>
+      <div id="security-alert"></div>
+      <form class="s-form" onsubmit="changePassword(event)" style="max-width:480px;">
+        <div class="form-group">
+          <label>Current Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="sec-cur" placeholder="••••••••" required>
+            <button type="button" class="pw-eye" onclick="togglePw('sec-cur',this)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>New Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="sec-new" placeholder="Min 6 characters" required minlength="6">
+            <button type="button" class="pw-eye" onclick="togglePw('sec-new',this)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Confirm New Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="sec-confirm" placeholder="••••••••" required minlength="6">
+            <button type="button" class="pw-eye" onclick="togglePw('sec-confirm',this)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="s-btn s-btn-primary">Update Password</button>
+        </div>
+      </form>
+
+      <div style="margin-top:40px;">
+        <div class="sp-panel-title" style="font-size:17px;color:#dc2626;">Danger Zone</div>
+        <div style="margin-top:12px;" class="danger-box">
+          <p>Permanently delete your account and all associated data. This action cannot be undone.</p>
+          <button class="s-btn s-btn-danger" onclick="deleteAccount()">Delete Account</button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<script src="../assets/acenotes.js"></script>
+<script type="module">
+import { auth, db } from '../assets/firebase.js';
+import { onAuthStateChanged, updatePassword, reauthenticateWithCredential, EmailAuthProvider, deleteUser, signOut, updateProfile, updateEmail } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js';
+import { doc, getDoc, setDoc, collection, query, where, getDocs, limit } from 'https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js';
+
+renderNavbar({ base: '../', cur: '' });
+
+const COLORS = ['#4e6ef2','#10b981','#f59e0b','#ef4444','#8b5cf6','#06b6d4','#ec4899'];
+function avatarColor(name) { return COLORS[name.charCodeAt(0) % COLORS.length]; }
+
+function togglePw(id, btn) {
+  const inp = document.getElementById(id);
+  const isText = inp.type === 'text';
+  inp.type = isText ? 'password' : 'text';
+  btn.innerHTML = isText
+    ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>'
+    : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+}
+window.togglePw = togglePw;
+
+let settled = false;
+onAuthStateChanged(auth, async user => {
+  if (settled) return;
+  settled = true;
+  if (!user) {
+    sessionStorage.removeItem('an-user');
+    location.href = 'auth.html';
+    return;
+  }
+
+  const snap = await getDoc(doc(db, 'users', user.uid));
+  const profile = snap.exists() ? snap.data() : { name: user.displayName || 'User', email: user.email };
+  if (!profile.email) profile.email = user.email;
+  const isAdmin = snap.exists() && !!snap.data().isAdmin;
+  sessionStorage.setItem('an-user', JSON.stringify({ name: user.displayName || user.email, uid: user.uid, isAdmin }));
+  if (isAdmin) document.getElementById('admin-nav-btn').style.display = 'flex';
+  document.getElementById('sp-wrap').style.display = 'flex';
+
+  // Sidebar
+  document.getElementById('sp-avatar').textContent  = profile.name[0].toUpperCase();
+  document.getElementById('sp-avatar').style.background = avatarColor(profile.name);
+  document.getElementById('sp-uname').textContent   = profile.name;
+  document.getElementById('sp-email').textContent   = profile.email;
+
+  // Profile form
+  document.getElementById('pf-name').value  = profile.name;
+  document.getElementById('pf-email').value = profile.email;
+  document.getElementById('pf-phone').value = profile.phone || '';
+
+  // Tab switching
+  document.querySelectorAll('.sp-nav-item[data-panel]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.sp-nav-item').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.sp-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('panel-' + btn.dataset.panel).classList.add('active');
+    });
+  });
+
+  async function renderPurchases() {
+    const el = document.getElementById('purchases-list');
+    try {
+      const q = query(collection(db, 'orders'), where('uid', '==', user.uid));
+      const s = await getDocs(q);
+      const orders = s.docs.map(d => d.data());
+      if (!orders.length) {
+        el.innerHTML = `<div class="empty-state-box"><div class="empty-state-icon">🛒</div><div class="empty-state-title">No purchases yet</div><div class="empty-state-sub">Browse our notes and test papers to get started.</div><a href="buy-notes.html" class="s-btn s-btn-primary" style="text-decoration:none;margin-top:4px;">Browse Notes</a></div>`;
+        return;
+      }
+      el.innerHTML = orders.map(o => {
+        const waMsg = encodeURIComponent(`Hello, I would like to complete payment for my AceNotes order.\n\nOrder ID: ${o.id}\nTotal: ₹${o.total}\n\nItems:\n${(o.items||[]).map(i => `- ${i.title} (₹${i.price})`).join('\n')}\n\nPlease confirm payment details.`);
+        const waUrl = `https://wa.me/919163164555?text=${waMsg}`;
+        return `
+        <div class="order-hist-card">
+          <div class="order-hist-head">
+            <span class="order-hist-id">#${o.id}</span>
+            <span class="order-hist-date">${new Date(o.date).toLocaleDateString()}</span>
+            <span class="badge badge-${o.status}">${o.status}</span>
+            <span class="order-hist-total">₹${o.total}</span>
+            ${o.status === 'pending' ? `<a href="${waUrl}" target="_blank" class="s-btn s-btn-primary" style="font-size:12px;padding:6px 14px;text-decoration:none;">💬 Pay via WhatsApp</a>` : ''}
+          </div>
+          ${o.items.map(i => `<div class="order-hist-row"><span>${i.title}</span><span>₹${i.price}</span></div>`).join('')}
+        </div>`;
+      }).join('');
+    } catch(e) { el.innerHTML = `<div class="empty-state-box"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Could not load purchases</div></div>`; }
+  }
+
+  async function renderMyNotes() {
+    const el = document.getElementById('mynotes-list');
+    try {
+      const q = query(collection(db, 'orders'), where('uid', '==', user.uid), where('status', '==', 'approved'));
+      const s = await getDocs(q);
+      const items = s.docs.flatMap(d => d.data().items || []);
+      if (!items.length) {
+        el.innerHTML = `<div class="empty-state-box"><div class="empty-state-icon">📚</div><div class="empty-state-title">No notes yet</div><div class="empty-state-sub">Orders are reviewed and approved within 24 hours of purchase.</div></div>`;
+        return;
+      }
+      const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+      el.innerHTML = `<div class="notes-grid">${items.map(i => {
+        const note = NOTES.find(n => n.id === i.id || n.title === i.title);
+        const src = note?.cover ? (dark ? note.cover.dark : note.cover.light) : null;
+        const imgPath = src ? src.replace('../', '../') : null;
+        const cover = imgPath
+          ? `<div class="nc-cover"><img src="${imgPath}" alt="${i.title}"><div class="nc-overlay"><span>Download</span></div></div>`
+          : `<div class="nc-cover nc-cover-empty"><span>📚</span></div>`;
+        return `<div class="note-card visible" onclick="${i.link ? `window.open('${i.link}','_blank')` : ''}"> 
+          ${cover}
+          <div class="nc-body">
+            <div class="nc-tags"><span class="nc-tag">${note ? 'Class '+note.cls : 'Notes'}</span><span class="nc-tag nc-tag-alt">${note?.board||'JEE'}</span></div>
+            <p class="nc-title">${i.title}</p>
+            <div class="nc-footer">
+              <span style="font-size:12px;color:var(--text-faint);">Lifetime access</span>
+              ${i.link
+                ? `<a href="${i.link}" target="_blank" class="nc-btn" onclick="event.stopPropagation()">Download PDF</a>`
+                : `<span class="nc-btn" style="background:var(--bg-soft);color:var(--text-faint);cursor:default;">Pending</span>`}
+            </div>
+          </div>
+        </div>`;
+      }).join('')}</div>`;
+    } catch(e) { el.innerHTML = `<div class="empty-state-box"><div class="empty-state-icon">⚠️</div><div class="empty-state-title">Could not load notes</div></div>`; }
+  }
+
+  renderPurchases();
+  renderMyNotes();
+
+  window.saveProfile = async function(e) {
+    e.preventDefault();
+    const name  = document.getElementById('pf-name').value.trim();
+    const email = document.getElementById('pf-email').value.trim();
+    const phone = document.getElementById('pf-phone').value.trim();
+    const alertEl = document.getElementById('profile-alert');
+    if (!email || !email.includes('@')) return alertEl.innerHTML = `<div class="alert error">Enter a valid email.</div>`;
+    if (phone && !/^\d{10}$/.test(phone))
+        return alertEl.innerHTML = `<div class="alert error">Enter a valid 10-digit phone number (no country code).</div>`;
+    try {
+      const checks = [
+        getDocs(query(collection(db, 'users'), where('name', '==', name), limit(1))),
+        phone ? getDocs(query(collection(db, 'users'), where('phone', '==', phone), limit(1))) : Promise.resolve({ empty: true }),
+        email !== user.email ? getDocs(query(collection(db, 'users'), where('email', '==', email), limit(1))) : Promise.resolve({ empty: true })
+      ];
+      const [nameSnap, phoneSnap, emailSnap] = await Promise.all(checks);
+      if (!nameSnap.empty && nameSnap.docs[0].id !== user.uid)
+        return alertEl.innerHTML = `<div class="alert error">This name is already taken.</div>`;
+      if (!phoneSnap.empty && phoneSnap.docs[0].id !== user.uid)
+        return alertEl.innerHTML = `<div class="alert error">This WhatsApp number is already registered.</div>`;
+      if (!emailSnap.empty && emailSnap.docs[0].id !== user.uid)
+        return alertEl.innerHTML = `<div class="alert error">This email is already registered.</div>`;
+      await updateProfile(user, { displayName: name });
+      if (email !== user.email) await updateEmail(user, email);
+      await setDoc(doc(db, 'users', user.uid), { name, email, phone }, { merge: true });
+      alertEl.innerHTML = `<div class="alert success">Profile updated successfully.</div>`;
+      document.getElementById('sp-uname').textContent = name;
+      document.getElementById('sp-email').textContent = email;
+      document.getElementById('sp-avatar').textContent = name[0].toUpperCase();
+      document.getElementById('sp-avatar').style.background = avatarColor(name);
+    } catch(err) {
+      const msg = err.code === 'auth/requires-recent-login'
+        ? 'Please sign out and sign back in before changing your email.'
+        : err.message;
+      alertEl.innerHTML = `<div class="alert error">${msg}</div>`;
+    }
+  };
+
+  window.changePassword = async function(e) {
+    e.preventDefault();
+    const cur     = document.getElementById('sec-cur').value;
+    const newPw   = document.getElementById('sec-new').value;
+    const confirm = document.getElementById('sec-confirm').value;
+    const alertEl = document.getElementById('security-alert');
+    if (newPw !== confirm) return alertEl.innerHTML = `<div class="alert error">New passwords do not match.</div>`;
+    try {
+      const cred = EmailAuthProvider.credential(user.email, cur);
+      await reauthenticateWithCredential(user, cred);
+      await updatePassword(user, newPw);
+      alertEl.innerHTML = `<div class="alert success">Password updated successfully.</div>`;
+      e.target.reset();
+    } catch(err) {
+      const msg = err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential'
+        ? 'Current password is incorrect.' : err.message;
+      alertEl.innerHTML = `<div class="alert error">${msg}</div>`;
+    }
+  };
+
+  window.deleteAccount = async function() {
+    if (!confirm('Are you sure? This cannot be undone.')) return;
+    const cur = prompt('Enter your password to confirm:');
+    if (!cur) return;
+    try {
+      const cred = EmailAuthProvider.credential(user.email, cur);
+      await reauthenticateWithCredential(user, cred);
+      const { collection, query, where, getDocs, deleteDoc, doc: fdoc } = await import('https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js');
+      const uid = user.uid;
+      // Delete all collections tied to this user in parallel
+      const [ordersSnap] = await Promise.all([
+        getDocs(query(collection(db, 'orders'), where('uid', '==', uid))),
+      ]);
+      await Promise.all([
+        ...ordersSnap.docs.map(d => deleteDoc(d.ref)),
+        deleteDoc(fdoc(db, 'users', uid)),
+        deleteDoc(fdoc(db, 'user_notes', uid)),
+      ]);
+      await deleteUser(user);
+      sessionStorage.clear();
+      location.href = '../index.html';
+    } catch(err) {
+      const msg = err.code === 'auth/requires-recent-login'
+        ? 'Please sign out and sign back in before deleting your account.'
+        : err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential'
+        ? 'Incorrect password.'
+        : err.message;
+      alert(msg);
+    }
+  };
+
+  window.logout = async function() {
+    sessionStorage.removeItem('an-user');
+    await signOut(auth);
+    location.href = '../index.html';
+  };
+
+  const hash = location.hash.replace('#','');
+  if (['purchases','mynotes','security'].includes(hash)) {
+    document.querySelector(`[data-panel="${hash}"]`)?.click();
+  }
+});
+</script>
+</body>
+</html>
