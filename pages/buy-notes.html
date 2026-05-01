@@ -82,18 +82,17 @@ window._ownedNoteIds = new Set();
     const fbUrl = new URL('../assets/firebase.js', location.href).href;
     const { auth, db } = await import(fbUrl);
     const { onAuthStateChanged } = await import('https://www.gstatic.com/firebasejs/12.12.1/firebase-auth.js');
-    const { doc, getDoc } = await import('https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js');
+    const { collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/12.12.1/firebase-firestore.js');
     onAuthStateChanged(auth, async user => {
       if (!user) return;
-      const snap = await getDoc(doc(db, 'user_notes', user.uid));
-      if (snap.exists()) {
-        (snap.data().items || []).forEach(i => {
-          // store both id and title for matching
+      const snap = await getDocs(query(collection(db, 'orders'), where('uid', '==', user.uid), where('status', '==', 'approved')));
+      snap.docs.forEach(d => {
+        (d.data().items || []).forEach(i => {
           if (i.id !== undefined) window._ownedNoteIds.add(String(i.id));
           if (i.title) window._ownedNoteIds.add(i.title);
         });
-        if (currentCls) renderSections();
-      }
+      });
+      if (currentCls) renderSections();
     });
   } catch(e) {}
 })();
@@ -122,9 +121,10 @@ function noteCard(note) {
     : `<div class="nc-cover nc-cover-empty"><span>${SUBJECT_ICONS[note.subject]||'📚'}</span><div class="nc-overlay"><span>View Details</span></div></div>`;
   const owned = window._ownedNoteIds && (window._ownedNoteIds.has(String(note.id)) || window._ownedNoteIds.has(note.title));
   const btn = owned
-    ? `<button class="nc-btn" style="background:#16a34a;" onclick="event.stopPropagation();location.href='settings.html#mynotes'">Owned</button>`
+    ? `<button class="nc-btn" style="background:#16a34a;" onclick="event.stopPropagation();location.href='settings.html#mynotes'">✓ Owned</button>`
     : `<button class="nc-btn" onclick="event.stopPropagation();cartAdd({id:${note.id},title:'${note.title.replace(/'/g,"\\'").replace(/"/g,'&quot;')}',price:${note.price}});this.textContent='✓ Added'">Add to Cart</button>`;
-  return `<div class="note-card visible" onclick="location.href='note-details.html?id=${note.id}'">
+  return `<div class="note-card visible${owned?' nc-owned':''}" onclick="location.href='note-details.html?id=${note.id}'">
+    ${owned ? '<div class="nc-owned-badge">✓ Purchased</div>' : ''}
     ${cover}
     <div class="nc-body">
       <div class="nc-tags"><span class="nc-tag">Class ${note.cls}</span><span class="nc-tag nc-tag-alt">${note.board||'JEE'}</span></div>
