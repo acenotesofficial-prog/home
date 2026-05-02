@@ -14,6 +14,37 @@
 </head>
 <body>
 
+<!-- Splash Screen -->
+<div id="splash" style="display:none;position:fixed;inset:0;z-index:99999;background:#0f1117;flex-direction:column;align-items:center;justify-content:center;gap:20px;">
+  <img src="assets/avatars/LOGO.png" style="width:90px;height:90px;border-radius:22px;animation:splashPop .5s cubic-bezier(.34,1.56,.64,1) both;" alt="AceNotes">
+  <div style="text-align:center;animation:splashFadeUp .5s .2s ease both;">
+    <div style="font-size:26px;font-weight:900;color:#fff;letter-spacing:-.5px;">AceNotes</div>
+    <div style="font-size:13px;color:#555a6e;margin-top:4px;">Your path to academic excellence</div>
+  </div>
+  <div style="position:absolute;bottom:48px;animation:splashFadeUp .5s .4s ease both;">
+    <div style="width:36px;height:3px;background:#4e6ef2;border-radius:4px;animation:splashBar 1.2s .6s ease-in-out infinite;"></div>
+  </div>
+</div>
+<style>
+  @keyframes splashPop{from{opacity:0;transform:scale(.7)}to{opacity:1;transform:scale(1)}}
+  @keyframes splashFadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes splashBar{0%,100%{width:36px;opacity:.4}50%{width:60px;opacity:1}}
+  #splash.hide{animation:splashOut .4s ease forwards}
+  @keyframes splashOut{to{opacity:0;pointer-events:none}}
+</style>
+<script>
+  (function(){
+    if(location.search.includes('source=pwa')){
+      const s=document.getElementById('splash');
+      s.style.display='flex';
+      setTimeout(()=>{
+        s.classList.add('hide');
+        setTimeout(()=>s.style.display='none',400);
+      },2000);
+    }
+  })();
+</script>
+
 <div id="navbar-mount"></div>
 
 <header class="hero">
